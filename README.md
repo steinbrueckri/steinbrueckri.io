@@ -1,1 +1,0 @@
-# steinbrueckri.github.io
