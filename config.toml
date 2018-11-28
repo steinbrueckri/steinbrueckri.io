@@ -1,0 +1,85 @@
+# Site settings
+baseURL = ""
+languageCode = "en-US"
+title = "Hi, i'm Richard!"
+theme = "hugo-split-theme"
+disableKinds = ["section", "taxonomy", "taxonomyTerm", "RSS", "sitemap"]
+
+# Enter your tracking code to enable Google Analytics
+googleAnalytics = ""
+
+# Copyright
+copyright = "Richard Steinbrück"
+
+[params]
+
+  # Metadata for search engines and social sharing
+  author = "Richard Steinbrück"
+  tagline = "tagline"
+  description = "My Blog"
+  shareImage = "images/me.jpg"
+  twitterHandle = "z3rogate"
+
+  # Favicon
+  favicon = "favicon.ico"
+
+  # Section - Visual
+  [params.visual]
+    # Image
+    [params.visual.image]
+      enable = true
+      file = "images/me.jpg"
+      position = "center center"
+
+  # Links
+  # Links List #1
+  [[params.links]]
+    [params.links.list1]
+      heading = "Social"
+
+      [[params.links.list1.link]]
+        text = "Twitter"
+        url = "https://twitter.com/z3rogate"
+
+      [[params.links.list1.link]]
+        text = "Instagram"
+        url = "https://www.instagram.com/richard.steinbrueck"
+
+      [[params.links.list1.link]]
+        text = "Facebook"
+        url = "https://www.facebook.com/richard.steinbrueck"
+
+      [[params.links.list1.link]]
+        text = "Medium"
+        url = "https://medium.com/@richard.steinbrueck"
+
+  # Links List #3
+  [[params.links]]
+    [params.links.list2]
+      heading = "Network"
+
+      [[params.links.list2.link]]
+        text = "Xing"
+        url = "https://www.xing.com/profile/Richard_Steinbrueck"
+
+      [[params.links.list2.link]]
+        text = "linkedin"
+        url = "https://www.linkedin.com/in/richard-steinbr%C3%BCck-453424b8/"
+
+  # Links List #3
+  [[params.links]]
+    [params.links.list3]
+      heading = "Code"
+
+      [[params.links.list3.link]]
+        text = "Github"
+        url = "https://github.com/steinbrueckri"
+
+      [[params.links.list3.link]]
+        text = "Gitlab"
+        url = "https://gitlab.com/Steinbrueckri"
+
+  # The original template is released under the Creative Commons Attribution 3.0 License.
+  # Please keep the original attribution link when using for your own project.
+  # If you'd like to use the template without the attribution, you can check out
+  # the license option via the template author's website: https://onepagelove.com/split
