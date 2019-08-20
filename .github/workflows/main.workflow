@@ -9,7 +9,7 @@ action "hugo-deploy-gh-pages" {
     "GIT_DEPLOY_KEY",
   ]
   env = {
-    HUGO_VERSION = "0.53"
+    HUGO_VERSION = "0.56.3"
   }
 }
 
