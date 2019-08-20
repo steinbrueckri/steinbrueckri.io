@@ -16,8 +16,8 @@ action "hugo-deploy-gh-pages" {
 action "rpc-ping" {
   uses = "khanhicetea/gh-actions-rpc-ping@master"
   env = {
-    PING_TITLE = "KhanhIceTea B(rain)-log"
-    PING_URL = "https://khanhicetea.com"
+    PING_TITLE = "Hi, i'm Richard!"
+    PING_URL = "https://steinbrueckri.github.io"
   }
   needs = ["hugo-deploy-gh-pages"]
 }
