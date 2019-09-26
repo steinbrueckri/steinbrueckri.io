@@ -1,8 +1,12 @@
-.DS_Store
+# Hugo default output directory
+/public
+
+## OS Files
+# Windows
 Thumbs.db
-db.json
-*.log
-node_modules/
-.deploy*/
-public/
-resources/
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# OSX
+.DS_Store
