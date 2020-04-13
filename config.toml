@@ -15,6 +15,7 @@ copyright = "Richard Steinbrück"
 
   # Metadata for search engines and social sharing
   author = "Richard Steinbrück"
+  author_image = "images/me.jpg"
   tagline = "tagline"
   description = "My Blog"
   shareImage = "images/me.jpg"
@@ -28,11 +29,10 @@ copyright = "Richard Steinbrück"
     # Image
     [params.visual.image]
       enable = true
-      file = "images/me.jpg"
+      file = "https://source.unsplash.com/user/steinbrueckri/"
       position = "center center"
 
   # Links
-  # Links List #1
   [[params.links]]
     [params.links.list1]
       heading = "Social"
