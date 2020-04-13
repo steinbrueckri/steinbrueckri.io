@@ -38,12 +38,12 @@ copyright = "Richard Steinbrück"
       heading = "Social"
 
       [[params.links.list1.link]]
-        text = "Twitter"
-        url = "https://twitter.com/z3rogate"
+        text = "Instagram"
+        url = "https://www.instagram.com/save.the.street"
 
       [[params.links.list1.link]]
-        text = "Instagram"
-        url = "https://www.instagram.com/richard.steinbrueck"
+        text = "Twitter"
+        url = "https://twitter.com/z3rogate"
 
       [[params.links.list1.link]]
         text = "Facebook"
