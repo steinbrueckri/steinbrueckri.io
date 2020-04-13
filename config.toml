@@ -15,6 +15,7 @@ copyright = "Richard Steinbrück"
 
   # Metadata for search engines and social sharing
   author = "Richard Steinbrück"
+  author_image = "images/me.jpg"
   tagline = "tagline"
   description = "My Blog"
   shareImage = "images/me.jpg"
@@ -28,22 +29,21 @@ copyright = "Richard Steinbrück"
     # Image
     [params.visual.image]
       enable = true
-      file = "images/me.jpg"
+      file = "https://source.unsplash.com/user/steinbrueckri/"
       position = "center center"
 
   # Links
-  # Links List #1
   [[params.links]]
     [params.links.list1]
       heading = "Social"
 
       [[params.links.list1.link]]
-        text = "Twitter"
-        url = "https://twitter.com/z3rogate"
+        text = "Instagram"
+        url = "https://www.instagram.com/save.the.street"
 
       [[params.links.list1.link]]
-        text = "Instagram"
-        url = "https://www.instagram.com/richard.steinbrueck"
+        text = "Twitter"
+        url = "https://twitter.com/z3rogate"
 
       [[params.links.list1.link]]
         text = "Facebook"
@@ -53,7 +53,6 @@ copyright = "Richard Steinbrück"
         text = "Medium"
         url = "https://medium.com/@richard.steinbrueck"
 
-  # Links List #3
   [[params.links]]
     [params.links.list2]
       heading = "Network"
@@ -63,21 +62,20 @@ copyright = "Richard Steinbrück"
         url = "https://www.xing.com/profile/Richard_Steinbrueck"
 
       [[params.links.list2.link]]
-        text = "linkedin"
+        text = "LinkedIn"
         url = "https://www.linkedin.com/in/richard-steinbr%C3%BCck-453424b8/"
 
-  # Links List #3
   [[params.links]]
     [params.links.list3]
       heading = "Code"
 
       [[params.links.list3.link]]
-        text = "Github"
+        text = "GitHub"
         url = "https://github.com/steinbrueckri"
 
       [[params.links.list3.link]]
-        text = "Gitlab"
-        url = "https://gitlab.com/Steinbrueckri"
+        text = "Gitstalk"
+        url = "https://gitstalk.netlify.com/steinbrueckri"
 
   # The original template is released under the Creative Commons Attribution 3.0 License.
   # Please keep the original attribution link when using for your own project.

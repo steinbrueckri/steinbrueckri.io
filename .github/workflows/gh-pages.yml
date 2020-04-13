@@ -6,12 +6,8 @@ on:
 jobs:
   build-deploy:
     runs-on: ubuntu-18.04
-    # runs-on: macOS-10.14
-    # runs-on: windows-2019
     steps:
     - uses: actions/checkout@master
-      # with:
-      #   submodules: true
 
     - name: Setup Hugo
       uses: peaceiris/actions-hugo@v2.2.1
@@ -22,6 +18,7 @@ jobs:
       run: hugo --gc --minify --cleanDestinationDir
 
     - name: Deploy
+      if: github.ref == 'refs/heads/master'
       uses: peaceiris/actions-gh-pages@v2.4.0
       env:
         ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
