@@ -74,8 +74,8 @@ copyright = "Richard Steinbrück"
         url = "https://github.com/steinbrueckri"
 
       [[params.links.list3.link]]
-        text = "Gitlab"
-        url = "https://gitlab.com/Steinbrueckri"
+        text = "Gitstalk"
+        url = "https://gitstalk.netlify.com/steinbrueckri"
 
   # The original template is released under the Creative Commons Attribution 3.0 License.
   # Please keep the original attribution link when using for your own project.
