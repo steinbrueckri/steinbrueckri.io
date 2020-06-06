@@ -130,12 +130,14 @@ body.page-template-page-fullsingle-split p {
   height: 100vh;
   display: flex;
 }
+
 @media (max-width: 800px) {
   .fs-split {
     height: auto;
     flex-wrap: wrap;
   }
 }
+
 .fs-split .split-image {
   width: 50%;
   height: 100vh;
