@@ -2,8 +2,14 @@
 baseURL = ""
 languageCode = "en-US"
 title = "Hi, i'm Richard!"
-theme = "hugo-split-theme"
-disableKinds = ["section", "taxonomy", "taxonomyTerm", "RSS", "sitemap"]
+theme = "steinbrueckri"
+
+[taxonomies]
+date = "date"
+category = "categories"
+tag = "tags"
+
+assetDir = "static"
 
 # Enter your tracking code to enable Google Analytics
 googleAnalytics = ""
@@ -12,6 +18,16 @@ googleAnalytics = ""
 copyright = "Richard Steinbrück"
 
 [params]
+
+  # Gallery Settings
+  ## Highest width is 2500px for landscape and 1500px for portrait.
+  ## This will give both orientations roughly the same resolution and size.
+  ## Every landscape image will also be scaled down to 1500px and 1000px,
+  ## and portrait photos to 1000px and 750px wide.
+  landscapePhotoWidths = [2500, 1500, 1000]
+  portraitPhotoWidths = [1500, 1000, 750]
+
+  DateForm = "02.01.2006"
 
   # Metadata for search engines and social sharing
   author = "Richard Steinbrück"
@@ -24,61 +40,34 @@ copyright = "Richard Steinbrück"
   # Favicon
   favicon = "favicon.ico"
 
-  # Section - Visual
-  [params.visual]
-    # Image
-    [params.visual.image]
-      enable = true
-      file = "https://source.unsplash.com/user/steinbrueckri/"
-      position = "center center"
+  # Frontpage
+  frontpage_image = "images/frontpage.jpg"
+  frontpage_caption_name = "Richard Steinbrück"
+  frontpage_caption_email = "me@steinbrueck.io"
+  frontpage_caption_url = "steinbrueck.io"
 
-  # Links
-  [[params.links]]
-    [params.links.list1]
-      heading = "Social"
+## Menu ##############################################################################
+[[menu.main]]
+name = "Home"
+url  = "/"
+weight = 10
 
-      [[params.links.list1.link]]
-        text = "Instagram"
-        url = "https://www.instagram.com/save.the.street"
+[[menu.main]]
+name = "Blog"
+url  = "/blog"
+weight = 12
 
-      [[params.links.list1.link]]
-        text = "Twitter"
-        url = "https://twitter.com/z3rogate"
+[[menu.main]]
+name = "Gallery"
+url  = "/gallery"
+weight = 13
 
-      [[params.links.list1.link]]
-        text = "Facebook"
-        url = "https://www.facebook.com/richard.steinbrueck"
+[[menu.main]]
+name = "About"
+url  = "/page/about"
+weight = 13
 
-      [[params.links.list1.link]]
-        text = "Medium"
-        url = "https://medium.com/@richard.steinbrueck"
-
-  [[params.links]]
-    [params.links.list2]
-      heading = "Network"
-
-      [[params.links.list2.link]]
-        text = "Xing"
-        url = "https://www.xing.com/profile/Richard_Steinbrueck"
-
-      [[params.links.list2.link]]
-        text = "LinkedIn"
-        url = "https://www.linkedin.com/in/richard-steinbr%C3%BCck-453424b8/"
-
-  [[params.links]]
-    [params.links.list3]
-      heading = "Code"
-
-      [[params.links.list3.link]]
-        text = "GitHub"
-        url = "https://github.com/steinbrueckri"
-
-      [[params.links.list3.link]]
-        text = "Gitstalk"
-        url = "https://gitstalk.netlify.com/steinbrueckri"
-
-  # The original template is released under the Creative Commons Attribution 3.0 License.
-  # Please keep the original attribution link when using for your own project.
-  # If you'd like to use the template without the attribution, you can check out
-  # the license option via the template author's website: https://onepagelove.com/split
-  
+[[menu.main]]
+name = "Contact"
+url  = "/page/contact/"
+weight = 15

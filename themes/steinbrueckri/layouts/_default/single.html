@@ -1,0 +1,15 @@
+{{ define "main" }}
+<span>
+    <h1>{{ .Title }}</h1>
+	</span>
+
+{{ if eq .Type "blog" }}
+    {{ partial "blog.html" . }}
+{{ end }}
+
+{{ .Content }}
+
+{{ if .Params.contact }}{{ partial "contact.html" . }}{{ end }}
+
+
+{{ end }}

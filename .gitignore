@@ -1,6 +1,7 @@
 ## Hugo
 public/
 resources/
+content/gallery/**/img/**
 
 ## Nodejs
 # Logs

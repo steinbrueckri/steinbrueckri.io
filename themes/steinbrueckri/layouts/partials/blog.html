@@ -1,0 +1,10 @@
+{{ if .Params.tags }}
+<div class="tags">
+    Tags:
+    {{range .Params.tags}}
+    <a class="tag-link" href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+    {{end}}
+</div>
+{{end}}
+
+Reading time: {{ math.Round (div (countwords .Content) 220.0) }} minutes.

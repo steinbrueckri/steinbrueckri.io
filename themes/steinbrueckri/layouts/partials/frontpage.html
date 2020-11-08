@@ -1,0 +1,18 @@
+<div class="frontpage">
+    <div class="frame">
+        <div class="picture">
+            {{ $image := resources.GetMatch (.Site.Params.frontpage_image | relURL) }}
+            {{ partial "responsive-image" (dict "Site" $.Site "image" $image "attrs" (dict "class" "portfolio-photo" )) }}
+        </div>
+
+        <div class="caption">
+            {{.Site.Params.frontpage_caption_name | safeHTML }}<br/>
+            {{ with .Site.Params.frontpage_caption_email | safeHTML }}
+                <a href="{{ . | safeHTML }}">{{ . | safeHTML }}</a><br/>
+            {{ end }}
+            {{ with .Site.Params.frontpage_caption_url | safeHTML }}
+                <a href="https://{{ . | safeHTML }}">{{ . | safeHTML }}</a><br/>
+            {{ end }}
+        </div>
+    </div>
+</div>

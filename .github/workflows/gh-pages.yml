@@ -1,28 +1,55 @@
-name: github pages
-
+name: Build and Deploy to Netlify
 on:
-  push
-
+  push:
+  pull_request:
+    types: [opened, synchronize]
+env:
+  B2_APPLICATION_KEY_ID: ${{ secrets.B2_APPLICATION_KEY_ID }}
+  B2_APPLICATION_KEY: ${{ secrets.B2_APPLICATION_KEY }}
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 jobs:
-  build-deploy:
-    runs-on: ubuntu-18.04
+  build:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+      - uses: actions/checkout@v2
 
-    # TODO: add setup node step
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.58.3'
 
-    - name: Setup Hugo
-      uses: peaceiris/actions-hugo@v2.2.1
-      with:
-        hugo-version: '0.58.3'
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
 
-    - name: Build
-      run: hugo --gc --minify --cleanDestinationDir
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/public
+            ~/resources
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
 
-    - name: Deploy
-      if: github.ref == 'refs/heads/development'
-      uses: peaceiris/actions-gh-pages@v2.4.0
-      env:
-        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        PUBLISH_BRANCH: master
-        PUBLISH_DIR: ./public
+      - name: install and setup b2
+        run: |
+          curl -LO https://f000.backblazeb2.com/file/backblazefiles/b2/cli/linux/b2
+          chmod +x b2
+          mkdir -p $HOME/bin
+          export PATH=$PATH:$HOME/bin
+          mv b2 $HOME/bin/b2
+          b2 authorize-account
+
+      - name: Build
+        run: |
+          export PATH=$PATH:$HOME/bin
+          yarn install
+          gulp build
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.1
+        with:
+          publish-dir: './public'
+          production-deploy: 'true'
+        timeout-minutes: 1

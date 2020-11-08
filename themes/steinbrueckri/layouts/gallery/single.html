@@ -1,0 +1,36 @@
+{{ define "main" }}
+
+<script src="{{ "js/gallery.js" | relURL }}"></script>
+<script src="{{ "js/hide_mouse_cursor.js" | relURL }}"></script>
+
+    <span>
+        <h1>{{ .Title }}</h1>
+    </span>
+
+    Date: {{.Date.Format "2006-01-02" }}<br>
+    {{ with .Summary }}
+        Summary: {{ . }}<br>
+    {{ end }}
+
+    {{ $images := .Page.Resources.ByType "image" }}
+    Look time: {{ math.Round (mul (len $images) 4) }} minutes.
+    {{ if .Params.tags }}
+    <div class="tags">
+        Tags:
+        {{range .Params.tags}}
+        <a class="tag-link" href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+        {{end}}
+    </div>
+    {{end}}
+
+    {{ .Content }}
+
+    <div class="gallery">
+        {{ with .Page.Resources.ByType "image" }}
+            {{ range . }}
+                {{ partial "responsive-image-gallery" (dict "Site" $.Site "image" . ) }}
+            {{ end }}
+        {{ end }}
+    </div>
+
+{{ end }}
