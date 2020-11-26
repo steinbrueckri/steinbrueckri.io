@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+export PATH=$PATH:$HOME/bin
 ## Configuration #######################################################################################################
 search_path="content/gallery/**"
 

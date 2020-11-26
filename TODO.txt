@@ -2,9 +2,8 @@ TODOs:
     TODO: Create Export profile in capture one
         - Create HOWTO how to use it
         - How to Create new Frontpage image
-    TODO 1:
-        Remove CNAME things
-    TODO: Setup DNS for netlify
     TODO: CSS Framework? https://tailwindcss.com/
     TODO: 404 page?
     TODO: theme.toml need to be changed
+    TODO: Fix sorting of gallery
+    TODo: Add netlify.toml?

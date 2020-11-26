@@ -4,8 +4,6 @@ on:
   pull_request:
     types: [opened, synchronize]
 env:
-  B2_APPLICATION_KEY_ID: ${{ secrets.B2_APPLICATION_KEY_ID }}
-  B2_APPLICATION_KEY: ${{ secrets.B2_APPLICATION_KEY }}
   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
   NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 jobs:
@@ -14,42 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
+      - name: Deploy to DEV
+        uses: nwtgck/actions-netlify@v1.1
         with:
-          hugo-version: '0.58.3'
+          publish-dir: './public'
+          timeout-minutes: 1
 
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12'
-
-      - name: Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/public
-            ~/resources
-            **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
-
-      - name: install and setup b2
-        run: |
-          curl -LO https://f000.backblazeb2.com/file/backblazefiles/b2/cli/linux/b2
-          chmod +x b2
-          mkdir -p $HOME/bin
-          export PATH=$PATH:$HOME/bin
-          mv b2 $HOME/bin/b2
-          b2 authorize-account
-
-      - name: Build
-        run: |
-          export PATH=$PATH:$HOME/bin
-          yarn install
-          gulp build
-
-      - name: Deploy to Netlify
+      - name: Deploy to PROD
+        if: github.ref == 'refs/heads/master'
         uses: nwtgck/actions-netlify@v1.1
         with:
           publish-dir: './public'
           production-deploy: 'true'
-        timeout-minutes: 1
+          timeout-minutes: 1

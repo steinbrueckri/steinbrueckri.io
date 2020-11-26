@@ -1,0 +1,12 @@
+# Netlify TOML reference
+#   https://www.netlify.com/docs/netlify-toml-reference/
+#
+# hugo reference
+#   https://gohugo.io/commands/hugo/
+
+[build]
+publish = "public"
+command = "gulp netify"
+
+[build.environment]
+HUGO_VERSION = "0.78.2"
