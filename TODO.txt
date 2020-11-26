@@ -6,3 +6,5 @@ TODOs:
         Remove CNAME things
     TODO: Setup DNS for netlify
     TODO: CSS Framework? https://tailwindcss.com/
+    TODO: 404 page?
+    TODO: theme.toml need to be changed
