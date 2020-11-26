@@ -4,10 +4,6 @@ languageCode = "en-US"
 title = "Hi, i'm Richard!"
 theme = "steinbrueckri"
 
-[taxonomies]
-date = "date"
-tag = "tags"
-
 assetDir = "static"
 
 # Enter your tracking code to enable Google Analytics
