@@ -1,7 +1,7 @@
 <div class="frontpage">
     <div class="frame">
         <div class="picture">
-            {{ $image := resources.GetMatch (.Site.Params.frontpage_image | relURL) }}
+            {{ $image := resources.Get .Site.Params.frontpage_image }}
             {{ partial "responsive-image" (dict "Site" $.Site "image" $image "attrs" (dict "class" "portfolio-photo" )) }}
         </div>
 
