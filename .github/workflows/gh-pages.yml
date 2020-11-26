@@ -10,13 +10,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
 
       - name: Deploy to DEV
         uses: nwtgck/actions-netlify@v1.1
         with:
           publish-dir: './public'
-          timeout-minutes: 1
 
       - name: Deploy to PROD
         if: github.ref == 'refs/heads/master'
@@ -24,4 +22,3 @@ jobs:
         with:
           publish-dir: './public'
           production-deploy: 'true'
-          timeout-minutes: 1
