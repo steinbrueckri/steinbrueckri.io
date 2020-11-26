@@ -6,7 +6,6 @@ theme = "steinbrueckri"
 
 [taxonomies]
 date = "date"
-category = "categories"
 tag = "tags"
 
 assetDir = "static"
@@ -65,9 +64,9 @@ weight = 13
 [[menu.main]]
 name = "About"
 url  = "/page/about"
-weight = 13
+weight = 88
 
 [[menu.main]]
 name = "Contact"
 url  = "/page/contact/"
-weight = 15
+weight = 99
