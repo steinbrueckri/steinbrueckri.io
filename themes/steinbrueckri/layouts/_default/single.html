@@ -1,7 +1,7 @@
 {{ define "main" }}
 <span>
     <h1>{{ .Title }}</h1>
-	</span>
+</span>
 
 {{ if eq .Type "blog" }}
     {{ partial "blog.html" . }}
@@ -10,6 +10,5 @@
 {{ .Content }}
 
 {{ if .Params.contact }}{{ partial "contact.html" . }}{{ end }}
-
 
 {{ end }}
