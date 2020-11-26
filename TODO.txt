@@ -5,5 +5,4 @@ TODOs:
     TODO: CSS Framework? https://tailwindcss.com/
     TODO: 404 page?
     TODO: theme.toml need to be changed
-    TODO: Fix sorting of gallery
     TODo: Add netlify.toml?
