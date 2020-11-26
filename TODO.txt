@@ -5,4 +5,4 @@ TODOs:
     TODO: CSS Framework? https://tailwindcss.com/
     TODO: 404 page?
     TODO: theme.toml need to be changed
-    TODo: Add netlify.toml?
+    TODO: Add lazyload - https://www.andreaverlicchi.eu/vanilla-lazyload/
