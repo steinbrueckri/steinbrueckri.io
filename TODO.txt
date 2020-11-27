@@ -2,7 +2,5 @@ TODOs:
     TODO: Create Export profile in capture one
         - Create HOWTO how to use it
         - How to Create new Frontpage image
-    TODO: CSS Framework? https://tailwindcss.com/
-    TODO: theme.toml need to be changed
-    TODO: street-07-2020 dont show exif data, maybee the file dont have exifdata
-        - Fix Images
+    TODO: Mobile View is not optimal
+    TODO: config.toml cleanup

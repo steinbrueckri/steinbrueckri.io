@@ -10,3 +10,5 @@ command = "gulp netify"
 
 [build.environment]
 HUGO_VERSION = "0.78.2"
+# B2_APPLICATION_KEY_ID are set in the Netlify UI
+# B2_APPLICATION_KEY are set in the Netlify UI

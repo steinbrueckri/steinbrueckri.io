@@ -1,0 +1,16 @@
+name: ci
+
+on:
+  push
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: echo "HUGO_VERSION=$(cat netlify.toml | grep HUGO_VERSION | cut -d '"' -f2)" >> $GITHUB_ENV
+      - uses: actions/setup-node@v2-beta
+      - uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+      - run: yarn install && gulp build
