@@ -12,5 +12,11 @@
         {{- block "main" . }}{{- end }}
         </div>
         {{- partial "footer.html" . -}}
+
+        <script>
+            var lazyLoadInstance = new LazyLoad({
+                // Your custom settings go here
+            });
+        </script>
     </body>
 </html>

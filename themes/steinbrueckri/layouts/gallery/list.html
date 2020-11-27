@@ -12,7 +12,7 @@
             {{ with .Page.Resources.ByType "image" }}
                 {{ range first 3 . }}
                     {{ $scaled := .Fill "300x225 center" }}
-                    <img class="thumbnail" src="{{ $scaled.Permalink }}">
+                    <img class="lazy thumbnail" src="{{ $scaled.Permalink }}">
                 {{ end }}
             {{ end }}
         </a>

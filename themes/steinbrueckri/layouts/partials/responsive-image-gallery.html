@@ -26,21 +26,20 @@
 
 <div class="gallery-item">
     <a href="{{ $imgSrc }}">
-
-        <img class="thumbnail" src="{{ $imgSrc }}" srcset="{{ $imgSrcSet }}" alt="
-                {{ with $image.Exif }}
-                    {{ with .Tags.ISOSpeedRatings }}ISO {{ . }}{{ end }} -
-                    {{ with .Tags.ExposureTime }}{{ . }}{{ end }} -
-                    {{ with .Tags.FocalLength }}{{ . }}mm{{ end }} -
-                    {{ with .Tags.FNumber }}F/{{ . }}{{ end }}
-                {{ end }}">
+        <img class="lazy thumbnail" data-src="{{ $imgSrc }}" data-srcset="{{ $imgSrcSet }}" data-sizes="500w" alt="
+        {{ with $image.Exif }}
+            {{ with .Tags.ISOSpeedRatings }}ISO {{ . }}{{ end }}
+            {{ with .Tags.ExposureTime }} - {{ . }}{{ end }}
+            {{ with .Tags.FocalLength }} - {{ . }}mm{{ end }}
+            {{ with .Tags.FNumber }} - F/{{ . }}{{ end }}
+        {{ end }}"/>
     </a>
     {{ with $image.Exif }}
     <div class="gallery-item-caption">
-        {{ with .Tags.ISOSpeedRatings }}ISO {{ . }}{{ end }} -
-        {{ with .Tags.ExposureTime }}{{ . }}{{ end }} -
-        {{ with .Tags.FocalLength }}{{ . }}mm{{ end }} -
-        {{ with .Tags.FNumber }}F/{{ . }}{{ end }}
+        {{ with .Tags.ISOSpeedRatings }}ISO {{ . }}{{ end }}
+        {{ with .Tags.ExposureTime }} - {{ . }}{{ end }}
+        {{ with .Tags.FocalLength }} - {{ . }}mm{{ end }}
+        {{ with .Tags.FNumber }} - F/{{ . }}{{ end }}
     </div>
     {{ end }}
 </div>

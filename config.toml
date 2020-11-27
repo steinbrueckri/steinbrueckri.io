@@ -19,8 +19,8 @@ copyright = "Richard Steinbrück"
   ## This will give both orientations roughly the same resolution and size.
   ## Every landscape image will also be scaled down to 1500px and 1000px,
   ## and portrait photos to 1000px and 750px wide.
-  landscapePhotoWidths = [2500, 1500, 1000]
-  portraitPhotoWidths = [1500, 1000, 750]
+  landscapePhotoWidths = [2500, 1500, 1000, 500, 250]
+  portraitPhotoWidths = [1500, 1000, 750, 500, 250]
 
   DateForm = "02.01.2006"
 
