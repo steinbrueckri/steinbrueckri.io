@@ -2,6 +2,7 @@ var gulp = require("gulp");
 var htmlmin = require("gulp-htmlmin");
 var cssmin = require("gulp-cssmin");
 var shell = require("gulp-shell");
+var htmlValidator = require('gulp-w3c-html-validator');
 
 gulp.task("hugo-build", shell.task(["hugo"]));
 
@@ -14,6 +15,13 @@ gulp.task("install-b2", shell.task([
 ]))
 
 gulp.task("get-gallery-images", shell.task(["./get_gallery_images.sh"]));
+
+gulp.task("html-validate", () => {
+    return gulp.src('public/**/*.html')
+        .pipe(htmlValidator())
+        .pipe(htmlValidator.reporter());
+});
+
 
 gulp.task("minify-html", () => {
   return gulp.src(["public/**/*.html"])
@@ -34,4 +42,4 @@ gulp.task('minify-css', () => {
 });
 
 gulp.task("build", gulp.series("hugo-build", "minify-html", "minify-css"));
-gulp.task("netify", gulp.series("install-b2", "get-gallery-images", "hugo-build", "minify-html", "minify-css"));
+gulp.task("ci", gulp.series("install-b2", "get-gallery-images", "hugo-build", "minify-html", "minify-css"));

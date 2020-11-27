@@ -1,16 +1,61 @@
 name: ci
 
 on:
-  push
+  push:
+
+env:
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+  B2_APPLICATION_KEY_ID: ${{ secrets.B2_APPLICATION_KEY_ID }}
+  B2_APPLICATION_KEY: ${{ secrets.B2_APPLICATION_KEY }}
 
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: actions/cache@v2
+        with:
+          path: |
+            **/public
+            **/resources
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
       - run: echo "HUGO_VERSION=$(cat netlify.toml | grep HUGO_VERSION | cut -d '"' -f2)" >> $GITHUB_ENV
       - uses: actions/setup-node@v2-beta
       - uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: ${{ env.HUGO_VERSION }}
-      - run: yarn install && gulp build
+      - name: Build
+        run: yarn install && gulp ci
+
+      ## TODO: Add some tests
+      #- name: Test
+      #  run: yarn install && gulp test
+
+      - name: Deploy to Netlify (dev)
+        uses: nwtgck/actions-netlify@v1.1
+        with:
+          publish-dir: './public'
+          production-deploy: false
+          github-deployment-environment: 'dev'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        timeout-minutes: 1
+
+      - name: Deploy to Netlify (prod)
+        if: github.ref == 'refs/heads/master'
+        uses: nwtgck/actions-netlify@v1.1
+        with:
+          publish-dir: './public'
+          production-deploy: true
+          github-deployment-environment: 'prod'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        timeout-minutes: 1
