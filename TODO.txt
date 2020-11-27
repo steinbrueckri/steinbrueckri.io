@@ -3,5 +3,6 @@ TODOs:
         - Create HOWTO how to use it
         - How to Create new Frontpage image
     TODO: CSS Framework? https://tailwindcss.com/
-    TODO: 404 page?
     TODO: theme.toml need to be changed
+    TODO: street-07-2020 dont show exif data, maybee the file dont have exifdata
+        - Fix Images
