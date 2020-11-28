@@ -34,7 +34,7 @@ copyright = "Richard Steinbrück"
   favicon = "favicon.ico"
 
   # Frontpage
-  frontpage_image = "frontpage.jpg"
+  frontpage_image = "images/frontpage.jpg"
   frontpage_caption_name = "Richard Steinbrück"
   frontpage_caption_email = "me@steinbrueck.io"
   frontpage_caption_url = "steinbrueck.io"
