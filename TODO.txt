@@ -2,5 +2,6 @@ TODOs:
     TODO: Create Export profile in capture one
         - Create HOWTO how to use it
         - How to Create new Frontpage image
+        - cat ~/Library/Application\ Support/Capture\ One/Recipes120/JPEG\ -\ Webpage.xml
     TODO: Mobile View is not optimal
     TODO: config.toml cleanup
