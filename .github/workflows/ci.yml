@@ -21,11 +21,8 @@ jobs:
             **/resources
             **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
-      - run: echo "HUGO_VERSION=$(cat netlify.toml | grep HUGO_VERSION | cut -d '"' -f2)" >> $GITHUB_ENV
       - uses: actions/setup-node@v2-beta
       - uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: ${{ env.HUGO_VERSION }}
       - name: Build
         run: yarn install && gulp ci
 
