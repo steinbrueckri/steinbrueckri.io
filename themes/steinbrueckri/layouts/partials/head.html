@@ -32,6 +32,8 @@
     <link href="{{ .RelPermalink }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}" />
     {{ end }}
 
+    {{ template "_internal/google_analytics.html" . }}
+
     <!-- TODO: Move js and css paths to config? -->
     <!-- TODO: Move js dependencys to static folder via npm or yarn? -->
     <!-- baguettebox -->
