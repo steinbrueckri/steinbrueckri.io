@@ -323,7 +323,7 @@ h1 {
 
 
 body {
-    <!-- TODO: set font to Helvetica Neue -->
+    font-family: 'Roboto Mono', monospace;
 }
 
 .frame {
