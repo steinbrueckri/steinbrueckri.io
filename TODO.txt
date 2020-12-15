@@ -4,3 +4,4 @@ TODOs:
         - How to Create new Frontpage image
         - cat ~/Library/Application\ Support/Capture\ One/Recipes120/JPEG\ -\ Webpage.xml
     TODO: Mobile View is not optimal
+    TODO: Add Archetypes for blog and gallery
