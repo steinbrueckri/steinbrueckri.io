@@ -103,9 +103,9 @@ a {
 }
 
 .gallery-item {
+    max-width: 1000px;
     padding-bottom: 10px;
-    margin-bottom: 10px;
-    margin-top: 30px;
+    margin: 30px auto 10px;
 }
 
 .gallery-item-caption {
@@ -250,6 +250,7 @@ h1 {
     border-radius: 5px;
     padding:10px;
 }
+
 .frontpage > * + * {
     margin-top: calc(var(--space) * var(--line-height));
 }
