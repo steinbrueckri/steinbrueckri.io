@@ -35,9 +35,12 @@
 
     <!-- TODO: Move js and css paths to config? -->
     <!-- TODO: Move js dependencys to static folder via npm or yarn? -->
+
     <!-- baguettebox -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js" async></script>
+    <script src="{{ "/js/gallery.js" | absURL }}"></script>
+    <script src="{{ "/js/hide_mouse_cursor.js" | absURL }}"></script>
 
     <!-- lazyload -->
     <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.0/dist/lazyload.min.js"></script>
@@ -45,8 +48,5 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ "/css/main.css" | absURL }}" type="text/css" media="screen" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-
-    <script src="{{ "/js/gallery.js" | absURL }}"></script>
-    <script src="{{ "/js/hide_mouse_cursor.js" | absURL }}"></script>
 
 </head>
