@@ -22,7 +22,6 @@ gulp.task("html-validate", () => {
         .pipe(htmlValidator.reporter());
 });
 
-
 gulp.task("minify-html", () => {
   return gulp.src(["public/**/*.html"])
       .pipe(htmlmin({
