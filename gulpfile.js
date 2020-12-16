@@ -14,6 +14,9 @@ gulp.task("install-b2", shell.task([
     "$HOME/bin/b2 authorize-account",
 ]))
 
+gulp.task("new-gallery", shell.task(["hugo new --kind gallery gallery/Street-$(date +%m-%Y)"]))
+gulp.task("new-blog", shell.task(["hugo new --kind blog blog/$(date +%Y-%m-%d)"]))
+
 gulp.task("get-gallery-images", shell.task(["./get_gallery_images.sh"]));
 
 gulp.task("html-validate", () => {

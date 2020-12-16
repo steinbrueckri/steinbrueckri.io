@@ -43,3 +43,23 @@ tags: ["Street", "BW", "Erfurt", "Ingolstadt", "Nuernberg"]
 ### Blog
 
 ![](https://screenshotapi.net/api/v1/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=steinbrueck.io/blog&output=image&delay=2000)
+
+## Create
+
+## Blog
+
+```sh
+hugo new --kind blog blog/Foobar-$(date +%Y-%m-%d)
+# you can also use a gulp task but in this case the name will be only the date
+gulp new-blog
+```
+
+## Gallery
+
+```sh
+hugo new --kind gallery gallery/Street-$(date +%m-%Y)
+# or if you want to set a name by our own ...
+hugo new --kind gallery gallery/<NAME>
+# you can also use a gulp task
+gulp new-gallery
+```
