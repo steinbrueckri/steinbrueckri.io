@@ -28,7 +28,7 @@
     {{ if (not .IsHome) }} <!-- Display breadcrumb not on frontpage -->
         <div class="main-navigation-breadcrumb">
             <ul class="breadcrumb">
-                {{ template "breadcrumb" dict "page" . "value" .Title }}
+                <li>{{ template "breadcrumb" dict "page" . "value" .Title }}</li>
             </ul>
         </div>
     {{ end }}
@@ -37,10 +37,10 @@
 {{define "breadcrumb"}}
     {{$parent := .page.Parent }}
     {{ if $parent }}
-        {{ $value := (printf "<li><a href='%s'>%s</a></li> > %s" $parent.RelPermalink $parent.Title .value) }}
+        {{ $value := (printf "<a href='%s'>%s</a> > %s" $parent.RelPermalink $parent.Title .value) }}
         {{ template "breadcrumb" dict "page" $parent "value" $value }}
     {{else}}
-        {{.value|safeHTML}}
+        {{ .value|safeHTML }}
     {{end}}
 {{end}}
 

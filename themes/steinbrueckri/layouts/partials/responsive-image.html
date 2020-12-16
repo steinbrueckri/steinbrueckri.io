@@ -31,4 +31,4 @@
 {{ end }}
 {{ $attributes = (delimit $attributes " ") }}
 
-<img class="lazy" data-src="{{ $imgSrc }}" data-srcset="{{ $imgSrcSet }}" data-sizes="500w" />
+<img class="lazy" src="{{ $image }}" alt="image" data-src="{{ $imgSrc }}" data-srcset="{{ $imgSrcSet }}" data-sizes="500w" />

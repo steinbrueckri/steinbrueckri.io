@@ -4,7 +4,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {{ with .Site.Params.name }}<meta name="author" content="{{ . }}">{{ end }}
     {{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
-    {{ with .Site.LanguageCode }}<meta http-equiv="content-language" content="{{ . }}" />{{ end }}
 
     {{ if not .Site.Params.OpenGraph.hide }}
     <meta name="og:site_name" content="{{ .Site.Title }}">
@@ -46,4 +45,8 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ "/css/main.css" | absURL }}" type="text/css" media="screen" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <script src="{{ "/js/gallery.js" | absURL }}"></script>
+    <script src="{{ "/js/hide_mouse_cursor.js" | absURL }}"></script>
+
 </head>

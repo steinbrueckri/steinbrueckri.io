@@ -1,8 +1,10 @@
 {{ define "main" }}
 <h1>{{ .Type }}</h1>
 {{ range .Pages }}
-<li>
-    <a href="{{.Permalink}}">{{.Title}}</a>
-</li>
+<ul>
+    <li>
+        <a href="{{.Permalink}}">{{.Title}}</a>
+    </li>
+</ul>
 {{ end }}
 {{ end }}
