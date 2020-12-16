@@ -1,6 +1,6 @@
 ---
 title: "GKE-Interconnect subnetwork is already used"
-summary: "My First Post"
+summary: "GKE-Interconnect subnetwork is already used"
 date: "2020-10-03"
 draft: false
 tags: ["Terraform", "Kubernetes", "GCP", "Network"]
