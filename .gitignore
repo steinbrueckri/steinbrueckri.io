@@ -197,3 +197,6 @@ typings/
 
 # Local Netlify folder
 .netlify
+
+# External deps, check gulpfile for more infos
+assets/external/**
