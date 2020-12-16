@@ -1,7 +1,6 @@
 {{ define "main" }}
-<span>
-    <h1>{{ .Title }}</h1>
-</span>
+
+<h1>{{ .Title }}</h1>
 
 {{ if eq .Type "blog" }}
     {{ partial "blog.html" . }}

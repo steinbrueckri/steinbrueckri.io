@@ -4,7 +4,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {{ with .Site.Params.name }}<meta name="author" content="{{ . }}">{{ end }}
     {{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
-    {{ with .Site.LanguageCode }}<meta http-equiv="content-language" content="{{ . }}" />{{ end }}
 
     {{ if not .Site.Params.OpenGraph.hide }}
     <meta name="og:site_name" content="{{ .Site.Title }}">
@@ -32,16 +31,19 @@
     <link href="{{ .RelPermalink }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}" />
     {{ end }}
 
-    <!-- TODO: Move js and css paths to config? -->
-    <!-- TODO: Move js dependencys to static folder via npm or yarn? -->
+    {{ template "_internal/google_analytics.html" . }}
+
     <!-- baguettebox -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js" async></script>
+    <link rel="stylesheet" href='{{ (resources.Get "external/baguetteBox.min.css").RelPermalink }}'>
+    <script src='{{ (resources.Get "external/baguetteBox.min.js").RelPermalink }}' async></script>
+    <script src="{{ "/js/gallery.js" | absURL }}"></script>
+    <script src="{{ "/js/hide_mouse_cursor.js" | absURL }}"></script>
 
     <!-- lazyload -->
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.0/dist/lazyload.min.js"></script>
+    <script src="{{ (resources.Get "external/lazyload.js").RelPermalink }}"></script>
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ "/css/main.css" | absURL }}" type="text/css" media="screen" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+
 </head>

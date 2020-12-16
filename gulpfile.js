@@ -14,14 +14,35 @@ gulp.task("install-b2", shell.task([
     "$HOME/bin/b2 authorize-account",
 ]))
 
+////// external deps ///////////////////////////////////////////////////////////////////////////////////////////////////
+gulp.task('copy-baguettebox', function () {
+    return gulp.src('node_modules/baguettebox.js/dist/baguetteBox.min.*')
+        .pipe(gulp.dest('./assets/external/'));
+});
+
+gulp.task('copy-lazyload', function () {
+    return gulp.src('node_modules/vanilla-lazyload/dist/lazyload.js')
+        .pipe(gulp.dest('./assets/external/'));
+});
+
+gulp.task("copy", gulp.series("copy-lazyload","copy-baguettebox"));
+
+gulp.task("new-gallery", shell.task(["hugo new --kind gallery gallery/Street-$(date +%m-%Y)"]))
+gulp.task("new-blog", shell.task(["hugo new --kind blog blog/$(date +%Y-%m-%d)"]))
 gulp.task("get-gallery-images", shell.task(["./get_gallery_images.sh"]));
 
 gulp.task("html-validate", () => {
+    const handleFile = (file, encoding, callback) => {
+        callback(null, file);
+        if (!file.w3cjs.success)
+            throw Error('HTML validation error(s) found');
+    };
+    // Ignore - HTML Error: page/contact/index.html Line 138, Column 37: Attribute “netlify” not allowed on element “form” at this point.
+    const ignoreDuplicateIds = (type, message) => !/netlify/.test(message);
     return gulp.src('public/**/*.html')
-        .pipe(htmlValidator())
+        .pipe(htmlValidator({ verifyMessage: ignoreDuplicateIds, skipWarnings: true }))
         .pipe(htmlValidator.reporter());
 });
-
 
 gulp.task("minify-html", () => {
   return gulp.src(["public/**/*.html"])
@@ -41,5 +62,5 @@ gulp.task('minify-css', () => {
       .pipe(gulp.dest("./public"));
 });
 
-gulp.task("build", gulp.series("hugo-build", "minify-html", "minify-css"));
-gulp.task("ci", gulp.series("install-b2", "get-gallery-images", "hugo-build", "minify-html", "minify-css"));
+gulp.task("build", gulp.series("copy", "hugo-build", "minify-html", "minify-css", "html-validate"));
+gulp.task("ci", gulp.series("install-b2", "get-gallery-images", "build"));

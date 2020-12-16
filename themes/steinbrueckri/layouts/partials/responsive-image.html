@@ -24,11 +24,7 @@
 {{ end }}
 {{ $imgSrcSet = (delimit $imgSrcSet ",") }}
 
-<!-- Format additional HTML attributes -->
-{{ $attributes := slice }}
-{{ range $name, $value := .attrs }}
-{{ $attributes = $attributes | append (printf "%s=%q" $name $value) }}
-{{ end }}
-{{ $attributes = (delimit $attributes " ") }}
+<!-- generate a very small preview image -->
+{{ $small := $image.Resize "1500x q10" }}
 
-<img class="lazy" data-src="{{ $imgSrc }}" data-srcset="{{ $imgSrcSet }}" data-sizes="500w" />
+<img class="lazy" src="{{ $small.RelPermalink }}" alt="image" data-src="{{ $small.RelPermalink }}" data-srcset="{{ $imgSrcSet }}" data-sizes="500w" />

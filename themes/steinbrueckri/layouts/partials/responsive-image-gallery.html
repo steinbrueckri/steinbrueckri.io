@@ -24,15 +24,19 @@
 {{ end }}
 {{ $imgSrcSet = (delimit $imgSrcSet ",") }}
 
+<!-- generate a very small preview image -->
+{{ $small := $image.Resize "1500x q10" }}
+
 <div class="gallery-item">
     <a href="{{ $imgSrc }}">
-        <img class="lazy thumbnail" data-src="{{ $imgSrc }}" data-srcset="{{ $imgSrcSet }}" data-sizes="500w" alt="
+        <img class="lazy thumbnail" src="{{ $small.RelPermalink }}" data-src="{{ $small.RelPermalink }}" data-srcset="{{ $imgSrcSet }}" data-sizes="500w" alt="
         {{ with $image.Exif }}
             {{ with .Tags.ISOSpeedRatings }}ISO {{ . }}{{ end }}
             {{ with .Tags.ExposureTime }} - {{ . }}{{ end }}
             {{ with .Tags.FocalLength }} - {{ . }}mm{{ end }}
             {{ with .Tags.FNumber }} - F/{{ . }}{{ end }}
-        {{ end }}"/>
+        {{ end }}
+        "/>
     </a>
     {{ with $image.Exif }}
     <div class="gallery-item-caption">

@@ -1,11 +1,6 @@
 {{ define "main" }}
 
-<script src="{{ "js/gallery.js" | relURL }}"></script>
-<script src="{{ "js/hide_mouse_cursor.js" | relURL }}"></script>
-
-    <span>
-        <h1>{{ .Title }}</h1>
-    </span>
+    <h1>{{ .Title }}</h1>
 
     Date: {{.Date.Format "2006-01-02" }}<br>
     {{ with .Summary }}
