@@ -1,0 +1,8 @@
+{{ if .IsNamedParams }}
+    <div class="gallery">
+        {{ $image := .Page.Resources.GetMatch (.Get "src") }}
+        {{ partial "responsive-image-gallery" (dict "Site" $.Site "image" $image "attrs" (dict "class" "portfolio-photo" )) }}
+    <div class="gallery">
+{{ else }}
+<h1>FAILED</h1>
+{{ end }}
