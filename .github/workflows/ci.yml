@@ -32,6 +32,7 @@ jobs:
 
       - name: Deploy to Netlify (dev)
         uses: nwtgck/actions-netlify@v1.1
+        id: netlify
         with:
           publish-dir: './public'
           production-deploy: false
@@ -42,6 +43,17 @@ jobs:
           enable-commit-comment: true
           overwrites-pull-request-comment: true
         timeout-minutes: 1
+
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v3
+        with:
+          urls: |
+            ${{ steps.netlify.outputs.deploy-url }}
+            ${{ steps.netlify.outputs.deploy-url }}/blog/
+            ${{ steps.netlify.outputs.deploy-url }}/gallery/
+            ${{ steps.netlify.outputs.deploy-url }}/gallery/street-01-2020/
+          budgetPath: ./.github/lighthouse/budget.json
+          uploadArtifacts: true
 
       - name: Deploy to Netlify (prod)
         if: github.ref == 'refs/heads/master'
