@@ -34,15 +34,15 @@ tags: ["Street", "BW", "Erfurt", "Ingolstadt", "Nuernberg"]
 
 ### Frontpage
 
-![](https://screenshotapi.net/api/v1/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=steinbrueck.io&output=image&delay=2000)
+![](https://screenshotapi.net/api/v2/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=steinbrueck.io&output=image&delay=2000)
 
 ### Gallery
 
-![](https://screenshotapi.net/api/v1/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=steinbrueck.io/gallery&output=image&delay=2000)
+![](https://screenshotapi.net/api/v2/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=steinbrueck.io/gallery&output=image&delay=2000)
 
 ### Blog
 
-![](https://screenshotapi.net/api/v1/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=steinbrueck.io/blog&output=image&delay=2000)
+![](https://screenshotapi.net/api/v2/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=steinbrueck.io/blog&output=image&delay=2000)
 
 ## Create
 
