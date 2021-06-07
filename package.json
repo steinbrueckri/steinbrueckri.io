@@ -17,6 +17,6 @@
     "baguettebox.js": "^1.11.1",
     "gulp-cssmin": "^0.2.0",
     "gulp-w3c-html-validator": "^2.0.1",
-    "vanilla-lazyload": "^17.3.2"
+    "vanilla-lazyload": "^17.4.0"
   }
 }
