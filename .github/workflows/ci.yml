@@ -23,7 +23,7 @@ jobs:
             **/resources
             **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
-      - uses: actions/setup-node@v2.1.5
+      - uses: actions/setup-node@v2.2.0
       - uses: peaceiris/actions-hugo@v2
       - name: Build
         run: yarn install && gulp ci
