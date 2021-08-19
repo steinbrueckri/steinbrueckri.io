@@ -3,7 +3,6 @@ name: ci
 
 on:
   - pull_request_target
-  - push
 
 permissions: read-all
   # down scope as necessary via https://docs.github.com/en/actions/reference/authentication-in-a-workflow#modifying-the-permissions-for-the-github_token
