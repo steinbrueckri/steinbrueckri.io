@@ -32,21 +32,18 @@ tags: ["Street", "BW", "Erfurt", "Ingolstadt", "Nuernberg"]
 
 ## Screenshot
 
-### Frontpage
 
 ![](https://screenshotapi.net/api/v1/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=steinbrueck.io&output=image&delay=2000)
 
-### Gallery
 
 ![](https://screenshotapi.net/api/v1/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=steinbrueck.io/gallery&output=image&delay=2000)
 
-### Blog
 
 ![](https://screenshotapi.net/api/v1/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=steinbrueck.io/blog&output=image&delay=2000)
 
 ## Create
 
-## Blog
+### Blog
 
 ```sh
 hugo new --kind blog blog/Foobar-$(date +%Y-%m-%d)
@@ -54,7 +51,7 @@ hugo new --kind blog blog/Foobar-$(date +%Y-%m-%d)
 gulp new-blog
 ```
 
-## Gallery
+### Gallery
 
 ```sh
 hugo new --kind gallery gallery/Street-$(date +%m-%Y)
