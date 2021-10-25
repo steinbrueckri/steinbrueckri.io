@@ -32,9 +32,9 @@ tags: ["Street", "BW", "Erfurt", "Ingolstadt", "Nuernberg"]
 
 ## Screenshot
 
-![](https://shot.screenshotapi.net/screenshot?token=HHQ8S1G-3RV4PSK-JWXSP97-V5979FN&url=https%3A%2F%2Fsteinbrueck.io&output=image&file_type=png&wait_for_event=load)
-![](https://shot.screenshotapi.net/screenshot?token=HHQ8S1G-3RV4PSK-JWXSP97-V5979FN&url=https%3A%2F%2Fsteinbrueck.io/gallery&output=image&file_type=png&wait_for_event=load)
-![](https://shot.screenshotapi.net/screenshot?token=HHQ8S1G-3RV4PSK-JWXSP97-V5979FN&url=https%3A%2F%2Fsteinbrueck.io/blog&output=image&file_type=png&wait_for_event=load)
+![](https://shot.screenshotapi.net/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=https%3A%2F%2Fsteinbrueck.io&output=image&file_type=png&wait_for_event=load)
+![](https://shot.screenshotapi.net/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETVFN&url=https%3A%2F%2Fsteinbrueck.io/gallery&output=image&file_type=png&wait_for_event=load)
+![](https://shot.screenshotapi.net/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=https%3A%2F%2Fsteinbrueck.io/blog&output=image&file_type=png&wait_for_event=load)
 
 ## Create
 
