@@ -29,13 +29,12 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
       - uses: actions/setup-node@v2.5.0
       - uses: peaceiris/actions-hugo@v2
+      - name: Install dependencies
+        run: yarn install
       - name: Build
-        run: yarn install && gulp ci
-
-      ## TODO: Add some tests
-      #- name: Test
-      #  run: yarn install && gulp test
-
+        run: gulp build
+      - name: Build (with images)
+        run: gulp ci
       - name: Deploy to Netlify (dev)
         uses: nwtgck/actions-netlify@v1.2
         id: netlify
