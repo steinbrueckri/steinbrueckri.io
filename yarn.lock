@@ -1222,10 +1222,10 @@ gulp-util@~2.2.0:
     through2 "^0.5.0"
     vinyl "^0.2.1"
 
-gulp-w3c-html-validator@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/gulp-w3c-html-validator/-/gulp-w3c-html-validator-5.1.0.tgz#ce4f655913bc22cad479e4b17e1a383142a02e46"
-  integrity sha512-Kv6jfs/cgwGguj0Q3ey4U3RA816qQcaE2AUS85OpUokE/A9r3ySOB/7YAvdoKGPrEOYBkPVQYz1xV7Y9/lFfig==
+gulp-w3c-html-validator@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/gulp-w3c-html-validator/-/gulp-w3c-html-validator-5.1.1.tgz#6414739a1b45aa7aa787dce179e222c5a925b013"
+  integrity sha512-MjliiLTaCWaKWDOsAnQXd7wDgQQR2laRL4CLe9Vv9a0REVnEgpnslVC9v/dpGEf/1eEWl1Qim3n6A0iOcpPYXA==
   dependencies:
     plugin-error "~1.0"
     through2 "~4.0"
