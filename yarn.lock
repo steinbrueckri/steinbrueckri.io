@@ -2970,10 +2970,10 @@ value-or-function@^3.0.0:
   resolved "https://registry.yarnpkg.com/value-or-function/-/value-or-function-3.0.0.tgz#1c243a50b595c1be54a754bfece8563b9ff8d813"
   integrity sha1-HCQ6ULWVwb5Up1S/7OhWO5/42BM=
 
-vanilla-lazyload@^17.5.0:
-  version "17.5.0"
-  resolved "https://registry.yarnpkg.com/vanilla-lazyload/-/vanilla-lazyload-17.5.0.tgz#ca2690fcf0627af3ad13e7fe41e7d0fac58d2a7e"
-  integrity sha512-1d2kjFT2BTrA2ynBBbJ58kIZqtB6TxocAvUFwmzjJ34RqLDlVPy4VmBDuAi6xgv+3LSmP6coKstU2eeRdI+ixw==
+vanilla-lazyload@^17.6.1:
+  version "17.6.1"
+  resolved "https://registry.yarnpkg.com/vanilla-lazyload/-/vanilla-lazyload-17.6.1.tgz#28de579c1fb2d406352454d172efe1382dfd2c18"
+  integrity sha512-Jn/WpWEIe+d6UUb8hw1qDO49W8lceFLW/ucWt8pdRcQvoQaucLtMnc9QHsm0Iz/xe4SCElEE2fyMZB8xC3e/6Q==
 
 vinyl-fs@^3.0.0:
   version "3.0.3"
