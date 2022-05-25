@@ -32,9 +32,9 @@ tags: ["Street", "BW", "Erfurt", "Ingolstadt", "Nuernberg"]
 
 ## Screenshot
 
-![](https://shot.screenshotapi.net/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=https%3A%2F%2Fsteinbrueck.io&output=image&file_type=png&wait_for_event=load)
-![](https://shot.screenshotapi.net/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETVFN&url=https%3A%2F%2Fsteinbrueck.io/gallery&output=image&file_type=png&wait_for_event=load)
-![](https://shot.screenshotapi.net/screenshot?token=HXY4S9I2FN8EWX0GXZQ7MWYZMZSFKETV&url=https%3A%2F%2Fsteinbrueck.io/blog&output=image&file_type=png&wait_for_event=load)
+![](https://api.microlink.io?url=https%3A%2F%2Fsteinbrueck.io&overlay.browser=none&overlay.background=%23c1c1c1&screenshot=true&meta=false&embed=screenshot.url)
+![](https://api.microlink.io?url=https%3A%2F%2Fsteinbrueck.io%2Fgallery&overlay.browser=none&overlay.background=%23c1c1c1&screenshot=true&meta=false&embed=screenshot.url)
+![](https://api.microlink.io?url=https%3A%2F%2Fsteinbrueck.io%2Fblog&overlay.browser=none&overlay.background=%23c1c1c1&screenshot=true&meta=false&embed=screenshot.url)
 
 ## Create
 
