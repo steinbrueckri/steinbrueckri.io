@@ -48,7 +48,7 @@ jobs:
         timeout-minutes: 1
 
       - name: Audit URLs using Lighthouse
-        uses: treosh/lighthouse-ci-action@9.3.1
+        uses: treosh/lighthouse-ci-action@9.6.8
         with:
           urls: |
             ${{ steps.netlify.outputs.deploy-url }}
