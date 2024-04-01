@@ -2994,10 +2994,10 @@ value-or-function@^3.0.0:
   resolved "https://registry.yarnpkg.com/value-or-function/-/value-or-function-3.0.0.tgz#1c243a50b595c1be54a754bfece8563b9ff8d813"
   integrity sha1-HCQ6ULWVwb5Up1S/7OhWO5/42BM=
 
-vanilla-lazyload@^18.0.0:
-  version "18.0.0"
-  resolved "https://registry.yarnpkg.com/vanilla-lazyload/-/vanilla-lazyload-18.0.0.tgz#737bf7d40bb6fdb92e611b305819ab66536936a0"
-  integrity sha512-jkTAkXnSommdEKfh6SGeV7WebSIBPbJLzSnSyEBwQVBviHCFXSHk377rEdhKMvuepGlCBD77FAI3Z5edMpM1hg==
+vanilla-lazyload@^19.0.5:
+  version "19.0.5"
+  resolved "https://registry.yarnpkg.com/vanilla-lazyload/-/vanilla-lazyload-19.0.5.tgz#ea8c2d7b01f8e486df6eafda8c550ea71273b3b6"
+  integrity sha512-fTZvntx1RnzLsWIp9VNsq8bcYsdwnE6KwRembVihYztoTxt7qFXS9vAVmotLvGoG5ijgKwxL3nOXrTVPXouY/g==
 
 vinyl-fs@^3.0.0:
   version "3.0.3"
