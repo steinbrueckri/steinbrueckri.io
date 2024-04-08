@@ -2100,10 +2100,10 @@ value-or-function@^4.0.0:
   resolved "https://registry.yarnpkg.com/value-or-function/-/value-or-function-4.0.0.tgz#70836b6a876a010dc3a2b884e7902e9db064378d"
   integrity sha512-aeVK81SIuT6aMJfNo9Vte8Dw0/FZINGBV8BfCraGtqVxIeLAEhJyoWs8SmvRVmXfGss2PmmOwZCuBPbZR+IYWg==
 
-vanilla-lazyload@^19.0.5:
-  version "19.0.5"
-  resolved "https://registry.yarnpkg.com/vanilla-lazyload/-/vanilla-lazyload-19.0.5.tgz#ea8c2d7b01f8e486df6eafda8c550ea71273b3b6"
-  integrity sha512-fTZvntx1RnzLsWIp9VNsq8bcYsdwnE6KwRembVihYztoTxt7qFXS9vAVmotLvGoG5ijgKwxL3nOXrTVPXouY/g==
+vanilla-lazyload@^19.1.2:
+  version "19.1.2"
+  resolved "https://registry.yarnpkg.com/vanilla-lazyload/-/vanilla-lazyload-19.1.2.tgz#8f6de9028edd04ec48049f2b4b123834ddc2f2f2"
+  integrity sha512-AIDbi3drK4uGHsNu0x9f6F36hXDBEoEj28dHLkRgBzoXnLBQXR2yNlIltbQhA3QrkEYCIqzivt+Gr0k2OuDR8g==
 
 vinyl-contents@^2.0.0:
   version "2.0.0"
