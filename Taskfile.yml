@@ -1,88 +1,126 @@
 version: "3"
 
+vars:
+  HUGO_VERSION: "0.134.3"
+  HUGO_PATH: ".tmp/hugo"
+  B2_BIN_PATH: "$HOME/bin/b2"
+  MINIFY_TOOL: "./node_modules/minify/bin/minify.js"
+  EXTERNAL_ASSETS_PATH: "./assets/external"
+
 tasks:
+
   clean:
+    desc: Clean build directory
     cmds:
       - rm -rfv .tmp public/**
+
   npm-install:
+    desc: Install npm dependencies
     cmds:
       - npm install
+
   hugo-install:
-    deps:
-      - npm-install
+    desc: Install Hugo
     cmds:
-      - ./node_modules/hugo-installer/bin/hugo-installer.js --extended true --version 0.134.3 --destination .tmp/
+      - task: npm-install
+      - ./node_modules/hugo-installer/bin/hugo-installer.js --extended true --version {{.HUGO_VERSION}} --destination .tmp/
+
   hugo-build:
-    deps:
-      - hugo-install
+    desc: Build Hugo site
     cmds:
-      - .tmp/hugo
+      - task: hugo-install
+      - "{{.HUGO_PATH}}"
 
   install-b2:
+    desc: Install Backblaze B2 CLI if not already installed
     cmds:
       - |
         if ! command -v b2 &> /dev/null; then
           mkdir -p $HOME/bin
-          cd $HOME/bin && curl -LO https://f000.backblazeb2.com/file/backblazefiles/b2/cli/linux/b2
-          chmod +x $HOME/bin/b2
+          curl -LO https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -o {{.B2_BIN_PATH}}
+          chmod +x {{.B2_BIN_PATH}}
           export PATH=$PATH:$HOME/bin
-          $HOME/bin/b2 authorize-account
+          {{.B2_BIN_PATH}} authorize-account
         else
           echo "b2 is already installed."
         fi
 
   copy-baguettebox:
+    desc: Copy BaguetteBox assets
     cmds:
-      - mkdir -p ./assets/external
-      - cp node_modules/baguettebox.js/dist/baguetteBox.min.* ./assets/external/
+      - mkdir -p {{.EXTERNAL_ASSETS_PATH}}
+      - cp node_modules/baguettebox.js/dist/baguetteBox.min.* {{.EXTERNAL_ASSETS_PATH}}/
 
   copy-lazyload:
+    desc: Copy LazyLoad assets
     cmds:
-      - mkdir -p ./assets/external
-      - cp node_modules/vanilla-lazyload/dist/lazyload.js ./assets/external/
+      - mkdir -p {{.EXTERNAL_ASSETS_PATH}}
+      - cp node_modules/vanilla-lazyload/dist/lazyload.js {{.EXTERNAL_ASSETS_PATH}}/
 
   copy:
+    desc: Copy external assets
     deps:
       - copy-lazyload
       - copy-baguettebox
 
   new-gallery:
+    desc: Create new gallery
     cmds:
       - hugo new --kind gallery gallery/Street-$(date +%m-%Y)
 
   new-blog:
+    desc: Create new blog post
     cmds:
       - hugo new --kind blog blog/$(date +%Y-%m-%d)
 
   get-gallery-images:
+    desc: Fetch gallery images from B2
     cmds:
-      - ./get_gallery_images.sh
+      - ./get_gallery_images.sh "content/gallery/**" "{{.B2_APPLICATION_KEY_ID}}" "{{.B2_APPLICATION_KEY}}"
+    vars:
+      B2_APPLICATION_KEY_ID:
+        sh: "[[ -z $B2_APPLICATION_KEY_ID ]] && op --account pixel-combo.1password.com item get sysbnrxrvnlha5nicpxhpzxkru --fields keyID || echo ${B2_APPLICATION_KEY_ID}"
+      B2_APPLICATION_KEY:
+        sh: "[[ -z $B2_APPLICATION_KEY ]] && op --account pixel-combo.1password.com item get sysbnrxrvnlha5nicpxhpzxkru --reveal --fields applicationKey || echo $B2_APPLICATION_KEY"
 
   minify-html:
+    desc: Minify HTML files
     cmds:
-      - find public -name "*.html" -exec bash -c "./node_modules/minify/bin/minify.js {} > {}.min && mv {}.min {}" \;
+      - find public -name "*.html" -exec bash -c "{{.MINIFY_TOOL}} {} > {}.min && mv {}.min {}" \;
 
   minify-js:
+    desc: Minify JS files
     cmds:
-      - find public -name "*.js" -exec bash -c "./node_modules/minify/bin/minify.js {} > {}.min && mv {}.min {}" \;
+      - find public -name "*.js" -exec bash -c "{{.MINIFY_TOOL}} {} > {}.min && mv {}.min {}" \;
 
   minify-css:
+    desc: Minify CSS files
     cmds:
-      - find public -name "*.css" -exec bash -c "./node_modules/minify/bin/minify.js {} > {}.min && mv {}.min {}" \;
+      - find public -name "*.css" -exec bash -c "{{.MINIFY_TOOL}} {} > {}.min && mv {}.min {}" \;
 
   minify:
+    desc: Minify all assets (HTML, JS, CSS)
     deps:
       - minify-html
       - minify-css
       - minify-js
 
+  link-checker:
+    desc: Check for broken links in site
+    cmds:
+      - "docker run --init -i --rm -w /input -v $(pwd)/public:/input lycheeverse/lychee -n --exclude 'linkedin*' ."
+
   build:
-    deps:
-      - copy
-      - hugo-build
-      - minify
+    desc: Build
+    cmds:
+      - task: npm-install
+      - task: copy
+      - task: hugo-build
+      - task: link-checker
+      - task: minify
 
   ci:
+    desc: Continuous Integration build
     deps:
       - install-b2
       - get-gallery-images
