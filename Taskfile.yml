@@ -37,7 +37,7 @@ tasks:
       - |
         if ! command -v b2 &> /dev/null; then
           mkdir -p $HOME/bin
-          curl -LO https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -o {{.B2_BIN_PATH}}
+          curl -L https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -o {{.B2_BIN_PATH}}
           chmod +x {{.B2_BIN_PATH}}
           export PATH=$PATH:$HOME/bin
           {{.B2_BIN_PATH}} authorize-account
