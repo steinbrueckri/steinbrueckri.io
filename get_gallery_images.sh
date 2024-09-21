@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 export PATH=$PATH:$HOME/bin
-## Configuration #######################################################################################################
-search_path="content/gallery/**"
+## Configuration ###############################################################
+SEARCH_PATH="content/gallery/**"
+B2_APPLICATION_KEY_ID=$2
+B2_APPLICATION_KEY=$3
 
-## PreFlight checks ####################################################################################################
+## PreFlight checks ###########################################################
 # Check if b2 command is available
 if ! command -v b2 &> /dev/null
 then
@@ -11,12 +13,8 @@ then
     exit
 fi
 
-# check ENVs
-[ -z "$B2_APPLICATION_KEY_ID" ] && echo "ERROR: B2_APPLICATION_KEY_ID is not set!" && exit 255
-[ -z "$B2_APPLICATION_KEY" ] && echo "ERROR: B2_APPLICATION_KEY is not set!" && exit 255
-
-## Flight ##############################################################################################################
-for index in $(find $search_path -name 'index.md'); do
+## Flight ######################################################################
+for index in $(find $SEARCH_PATH -name 'index.md'); do
   # get basepath
   basepath=$(dirname "$index")
   target="$basepath/img/"
@@ -30,5 +28,5 @@ for index in $(find $search_path -name 'index.md'); do
   echo "BasePath: $basepath"
   echo "ImageFolder: $target"
   echo "Source: $source"
-  b2 sync --delete --noProgress "$source" "$target"
+  b2 sync --delete --no-progress "$source" "$target"
 done
