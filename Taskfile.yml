@@ -39,7 +39,7 @@ tasks:
           mkdir -p $HOME/bin
           curl -L https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -o {{.B2_BIN_PATH}}
           chmod +x {{.B2_BIN_PATH}}
-          export PATH=$PATH:$HOME/bin
+          {{.B2_BIN_PATH}} version
           {{.B2_BIN_PATH}} authorize-account
         else
           echo "b2 is already installed."
@@ -121,7 +121,7 @@ tasks:
 
   ci:
     desc: Continuous Integration build
-    deps:
-      - install-b2
-      - get-gallery-images
-      - build
+    cmds:
+      - task: install-b2
+      - task: get-gallery-images
+      - task: build

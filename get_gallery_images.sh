@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
+set -e
 export PATH=$PATH:$HOME/bin
+
 ## Configuration ###############################################################
 SEARCH_PATH="content/gallery/**"
 B2_APPLICATION_KEY_ID=$2
@@ -9,8 +11,8 @@ B2_APPLICATION_KEY=$3
 # Check if b2 command is available
 if ! command -v b2 &> /dev/null
 then
-    echo "b2 could not be found"
-    exit
+    echo "ERROR: b2 command not be found"
+    exit 255
 fi
 
 ## Flight ######################################################################

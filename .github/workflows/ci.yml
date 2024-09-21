@@ -5,8 +5,7 @@ on:
   - push
   - pull_request_target
 
-permissions: read-all
-  # down scope as necessary via https://docs.github.com/en/actions/reference/authentication-in-a-workflow#modifying-the-permissions-for-the-github_token
+permissions: write-all
 
 env:
   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
