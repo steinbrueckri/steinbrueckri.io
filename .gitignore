@@ -2,6 +2,8 @@
 public/
 resources/
 content/gallery/**/img/**
+.hugo_build.lock
+.tmp
 
 ## Nodejs
 # Logs

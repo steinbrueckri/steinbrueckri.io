@@ -1,0 +1,89 @@
+version: "3"
+
+tasks:
+  clean:
+    cmds:
+      - rm -rfv .tmp public/**
+  npm-install:
+    cmds:
+      - npm install
+  hugo-install:
+    deps:
+      - npm-install
+    cmds:
+      - ./node_modules/hugo-installer/bin/hugo-installer.js --extended true --version 0.134.3 --destination .tmp/
+  hugo-build:
+    deps:
+      - hugo-install
+    cmds:
+      - .tmp/hugo
+
+  install-b2:
+    cmds:
+      - |
+        if ! command -v b2 &> /dev/null; then
+          mkdir -p $HOME/bin
+          cd $HOME/bin && curl -LO https://f000.backblazeb2.com/file/backblazefiles/b2/cli/linux/b2
+          chmod +x $HOME/bin/b2
+          export PATH=$PATH:$HOME/bin
+          $HOME/bin/b2 authorize-account
+        else
+          echo "b2 is already installed."
+        fi
+
+  copy-baguettebox:
+    cmds:
+      - mkdir -p ./assets/external
+      - cp node_modules/baguettebox.js/dist/baguetteBox.min.* ./assets/external/
+
+  copy-lazyload:
+    cmds:
+      - mkdir -p ./assets/external
+      - cp node_modules/vanilla-lazyload/dist/lazyload.js ./assets/external/
+
+  copy:
+    deps:
+      - copy-lazyload
+      - copy-baguettebox
+
+  new-gallery:
+    cmds:
+      - hugo new --kind gallery gallery/Street-$(date +%m-%Y)
+
+  new-blog:
+    cmds:
+      - hugo new --kind blog blog/$(date +%Y-%m-%d)
+
+  get-gallery-images:
+    cmds:
+      - ./get_gallery_images.sh
+
+  minify-html:
+    cmds:
+      - find public -name "*.html" -exec bash -c "./node_modules/minify/bin/minify.js {} > {}.min && mv {}.min {}" \;
+
+  minify-js:
+    cmds:
+      - find public -name "*.js" -exec bash -c "./node_modules/minify/bin/minify.js {} > {}.min && mv {}.min {}" \;
+
+  minify-css:
+    cmds:
+      - find public -name "*.css" -exec bash -c "./node_modules/minify/bin/minify.js {} > {}.min && mv {}.min {}" \;
+
+  minify:
+    deps:
+      - minify-html
+      - minify-css
+      - minify-js
+
+  build:
+    deps:
+      - copy
+      - hugo-build
+      - minify
+
+  ci:
+    deps:
+      - install-b2
+      - get-gallery-images
+      - build
