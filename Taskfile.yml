@@ -40,7 +40,7 @@ tasks:
           curl -L https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -o {{.B2_BIN_PATH}}
           chmod +x {{.B2_BIN_PATH}}
           {{.B2_BIN_PATH}} version
-          {{.B2_BIN_PATH}} authorize-account
+          {{.B2_BIN_PATH}} account authorize
         else
           echo "b2 is already installed."
         fi
