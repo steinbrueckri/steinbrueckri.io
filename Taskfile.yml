@@ -108,9 +108,10 @@ tasks:
   link-checker:
     desc: Check for broken links in site
     cmds:
-      - docker run --init -i --rm -w /input \
-          -v "$PWD/.lychee.toml:/tmp/.lychee.toml:ro" \
-          -v "$PWD/public:/input:ro" \
+      - |
+        docker run --init -i --rm -w /input \
+          -v "$PWD/.lychee.toml:/tmp/.lychee.toml" \
+          -v "$PWD/public:/input" \
           lycheeverse/lychee:latest . -c /tmp/.lychee.toml
 
   build:
