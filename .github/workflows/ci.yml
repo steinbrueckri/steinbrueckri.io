@@ -32,8 +32,11 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
 
-      - name: Install Task
+      - name: 🔧 Install Task
         uses: arduino/setup-task@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          version: "3.x"
 
       - name: Build
         run: task ci
