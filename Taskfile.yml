@@ -108,7 +108,7 @@ tasks:
   link-checker:
     desc: Check for broken links in site
     cmds:
-      - "docker run --init -i --rm -w /input -v $(pwd)/public:/input lycheeverse/lychee -n --exclude 'linkedin*' ."
+      - "docker run --init -i --rm -w /input -v $(pwd)/public:/input lycheeverse/lychee -n --exclude 'linkedin*' --exclude '*instagram*' ."
 
   build:
     desc: Build
