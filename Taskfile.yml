@@ -48,31 +48,25 @@ tasks:
 
   install-b2:
     desc: Install Backblaze B2 CLI if not already installed
+    silent: true
     cmds:
       - |
         if ! command -v b2 &> /dev/null; then
-          mkdir -p $HOME/bin
-          # Determine OS and architecture for b2 download
-          case "$(uname -s)" in
-            Linux*)   OS="linux";;
-            Darwin*)  OS="darwin";;
-            *)        echo "Unsupported OS: $(uname -s)" && exit 1;;
-          esac
-          case "$(uname -m)" in
-            x86_64)   ARCH="amd64";;
-            aarch64)  ARCH="arm64";;  # Fix for Linux ARM64
-            arm64)    ARCH="arm64";;  # macOS ARM64
-            *)        echo "Unsupported architecture: $(uname -m)" && exit 1;;
-          esac
-          B2_URL="https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-${OS}-${ARCH}"
-          echo "Downloading b2 CLI from: $B2_URL"
-          if ! curl -L "$B2_URL" -o {{.B2_BIN_PATH}}; then
-            echo "Failed to download b2 CLI from $B2_URL" && exit 1
+          # Prefer installing via Python pip (official B2 SDK provides the 'b2' CLI)
+          if command -v python3 &> /dev/null; then
+            python3 -m pip install --user --upgrade b2 || pip3 install --user --upgrade b2 || pip install --user --upgrade b2
+            # Ensure ~/.local/bin is in PATH for GitHub Actions and typical Linux envs
+            export PATH="$HOME/.local/bin:$PATH"
+          else
+            # Fallback to pip if python3 is not found
+            pip install --user --upgrade b2
+            export PATH="$HOME/.local/bin:$PATH"
           fi
-          chmod +x {{.B2_BIN_PATH}}
-          echo "Verifying b2 installation..."
-          {{.B2_BIN_PATH}} version || (echo "b2 installation verification failed" && exit 1)
-          {{.B2_BIN_PATH}} account authorize
+          if ! command -v b2 &> /dev/null; then
+            echo "b2 CLI installation via pip failed" && exit 1
+          fi
+          b2 version || (echo "b2 installation verification failed" && exit 1)
+          b2 account authorize
         else
           echo "b2 is already installed."
         fi
