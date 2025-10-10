@@ -29,7 +29,7 @@
 
 <div class="gallery-item">
     <a href="{{ $imgSrc }}">
-        <img class="lazy thumbnail" src="{{ $small.RelPermalink }}" data-src="{{ $small.RelPermalink }}" data-srcset="{{ $imgSrcSet }}" data-sizes="500w" alt="
+        <img class="lazy thumbnail" src="{{ $small.RelPermalink }}" data-src="{{ $small.RelPermalink }}" data-srcset="{{ $imgSrcSet }}" data-sizes="(max-width: 500px) 100vw, (max-width: 768px) 90vw, (max-width: 1200px) 80vw, 70vw" alt="
         {{ with $image.Exif }}
             {{ with .Tags.ISOSpeedRatings }}ISO {{ . }}{{ end }}
             {{ with .Tags.ExposureTime }} - {{ . }}{{ end }}

@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
-
 :root {
     --color-primary: black;
     --color-secondary: white;
@@ -393,6 +391,30 @@ body {
     }
 }
 
+/* Performance optimizations for mobile */
+@media only screen and (max-width: 768px) {
+    /* Reduce animations on mobile for better performance */
+    * {
+        animation-duration: 0.3s !important;
+        transition-duration: 0.3s !important;
+    }
+    
+    /* Optimize image rendering */
+    img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+    
+    /* Reduce repaints */
+    .main-navigation {
+        will-change: transform;
+    }
+    
+    .main-content {
+        will-change: transform;
+    }
+}
+
 /* Mobile Styles */
 @media only screen and (max-width: 768px) {
     .content {
@@ -481,5 +503,25 @@ body {
 
     .main-navigation a {
         padding: var(--space) calc(var(--space) * 1) calc(var(--space) + var(--border-size) / 2);
+    }
+    
+    /* Performance optimizations for very small screens */
+    .gallery-item {
+        margin: 15px auto 5px;
+    }
+    
+    /* Reduce font loading for better performance */
+    body {
+        font-display: swap;
+    }
+    
+    /* Optimize lazy loading */
+    .lazy {
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    
+    .lazy.loaded {
+        opacity: 1;
     }
 }

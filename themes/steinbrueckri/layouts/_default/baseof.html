@@ -10,7 +10,9 @@
         {{- partial "footer.html" . -}}
 
         <script>
-            var lazyLoadInstance = new LazyLoad({});
+            document.addEventListener('DOMContentLoaded', function() {
+                var lazyLoadInstance = new LazyLoad({});
+            });
         </script>
     </body>
 </html>

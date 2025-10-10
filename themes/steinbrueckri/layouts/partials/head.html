@@ -2,6 +2,11 @@
     <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} &middot; {{ .Site.Title }}{{ end }}</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- Preload critical resources for better performance -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap"></noscript>
+    
     {{ with .Site.Params.name }}<meta name="author" content="{{ . }}">{{ end }}
     {{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
 
@@ -35,9 +40,9 @@
 
     <!-- baguettebox -->
     <link rel="stylesheet" href='{{ (resources.Get "external/baguetteBox.min.css").RelPermalink }}'>
-    <script src='{{ (resources.Get "external/baguetteBox.min.js").RelPermalink }}' async></script>
-    <script src="{{ "/js/gallery.js" | absURL }}"></script>
-    <script src="{{ "/js/hide_mouse_cursor.js" | absURL }}"></script>
+    <script src='{{ (resources.Get "external/baguetteBox.min.js").RelPermalink }}' defer></script>
+    <script src="{{ "/js/gallery.js" | absURL }}" defer></script>
+    <script src="{{ "/js/hide_mouse_cursor.js" | absURL }}" defer></script>
 
     <!-- lazyload -->
     <script src="{{ (resources.Get "external/lazyload.js").RelPermalink }}"></script>
