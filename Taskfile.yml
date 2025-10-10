@@ -60,14 +60,17 @@ tasks:
           esac
           case "$(uname -m)" in
             x86_64)   ARCH="amd64";;
-            arm64)    ARCH="arm64";;
+            aarch64)  ARCH="arm64";;  # Fix for Linux ARM64
+            arm64)    ARCH="arm64";;  # macOS ARM64
             *)        echo "Unsupported architecture: $(uname -m)" && exit 1;;
           esac
           B2_URL="https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-${OS}-${ARCH}"
+          echo "Downloading b2 CLI from: $B2_URL"
           if ! curl -L "$B2_URL" -o {{.B2_BIN_PATH}}; then
             echo "Failed to download b2 CLI from $B2_URL" && exit 1
           fi
           chmod +x {{.B2_BIN_PATH}}
+          echo "Verifying b2 installation..."
           {{.B2_BIN_PATH}} version || (echo "b2 installation verification failed" && exit 1)
           {{.B2_BIN_PATH}} account authorize
         else
