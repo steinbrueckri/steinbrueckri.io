@@ -6,6 +6,8 @@ vars:
   B2_BIN_PATH: "$HOME/bin/b2"
   MINIFY_TOOL: "./node_modules/minify/bin/minify.js"
   EXTERNAL_ASSETS_PATH: "./assets/external"
+  OS: "{{OS}}"
+  ARCH: "{{ARCH}}"
 
 tasks:
 
@@ -16,20 +18,33 @@ tasks:
 
   npm-install:
     desc: Install npm dependencies
+    silent: true
     cmds:
-      - npm install
+      - |
+        if [ ! -d "node_modules" ] || [ "package.json" -nt "node_modules" ]; then
+          npm install
+        else
+          echo "npm dependencies are up to date"
+        fi
 
   hugo-install:
     desc: Install Hugo
+    silent: true
     cmds:
       - task: npm-install
-      - ./node_modules/hugo-installer/bin/hugo-installer.js --extended true --version {{.HUGO_VERSION}} --destination .tmp/
+      - |
+        if [ ! -f "{{.HUGO_PATH}}" ]; then
+          ./node_modules/hugo-installer/bin/hugo-installer.js --extended true --version {{.HUGO_VERSION}} --destination .tmp/
+        else
+          echo "Hugo already installed at {{.HUGO_PATH}}"
+        fi
 
   hugo-build:
     desc: Build Hugo site
     cmds:
       - task: hugo-install
-      - "{{.HUGO_PATH}}"
+      - |
+        {{.HUGO_PATH}} || (echo "Hugo build failed!" && exit 1)
 
   install-b2:
     desc: Install Backblaze B2 CLI if not already installed
@@ -37,9 +52,23 @@ tasks:
       - |
         if ! command -v b2 &> /dev/null; then
           mkdir -p $HOME/bin
-          curl -L https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux -o {{.B2_BIN_PATH}}
+          # Determine OS and architecture for b2 download
+          case "$(uname -s)" in
+            Linux*)   OS="linux";;
+            Darwin*)  OS="darwin";;
+            *)        echo "Unsupported OS: $(uname -s)" && exit 1;;
+          esac
+          case "$(uname -m)" in
+            x86_64)   ARCH="amd64";;
+            arm64)    ARCH="arm64";;
+            *)        echo "Unsupported architecture: $(uname -m)" && exit 1;;
+          esac
+          B2_URL="https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-${OS}-${ARCH}"
+          if ! curl -L "$B2_URL" -o {{.B2_BIN_PATH}}; then
+            echo "Failed to download b2 CLI from $B2_URL" && exit 1
+          fi
           chmod +x {{.B2_BIN_PATH}}
-          {{.B2_BIN_PATH}} version
+          {{.B2_BIN_PATH}} version || (echo "b2 installation verification failed" && exit 1)
           {{.B2_BIN_PATH}} account authorize
         else
           echo "b2 is already installed."
@@ -47,12 +76,14 @@ tasks:
 
   copy-baguettebox:
     desc: Copy BaguetteBox assets
+    silent: true
     cmds:
       - mkdir -p {{.EXTERNAL_ASSETS_PATH}}
       - cp node_modules/baguettebox.js/dist/baguetteBox.min.* {{.EXTERNAL_ASSETS_PATH}}/
 
   copy-lazyload:
     desc: Copy LazyLoad assets
+    silent: true
     cmds:
       - mkdir -p {{.EXTERNAL_ASSETS_PATH}}
       - cp node_modules/vanilla-lazyload/dist/lazyload.js {{.EXTERNAL_ASSETS_PATH}}/
@@ -64,17 +95,17 @@ tasks:
       - copy-baguettebox
 
   new-gallery:
-    desc: Create new gallery
+    desc: Create new gallery with current month/year (e.g., Street-12-2024)
     cmds:
       - hugo new --kind gallery gallery/Street-$(date +%m-%Y)
 
   new-blog:
-    desc: Create new blog post
+    desc: Create new blog post with current date (e.g., 2024-12-15)
     cmds:
       - hugo new --kind blog blog/$(date +%Y-%m-%d)
 
   get-gallery-images:
-    desc: Fetch gallery images from B2
+    desc: Fetch gallery images from Backblaze B2 storage (requires 1Password CLI or env vars)
     cmds:
       - ./get_gallery_images.sh "content/gallery/**" "{{.B2_APPLICATION_KEY_ID}}" "{{.B2_APPLICATION_KEY}}"
     vars:
@@ -83,20 +114,40 @@ tasks:
       B2_APPLICATION_KEY:
         sh: "[[ -z $B2_APPLICATION_KEY ]] && op --account pixel-combo.1password.com item get sysbnrxrvnlha5nicpxhpzxkru --reveal --fields applicationKey || echo $B2_APPLICATION_KEY"
 
+  minify-files:
+    desc: Minify files of specified type
+    silent: true
+    cmds:
+      - |
+        if [ -d "public" ]; then
+          find public -name "{{.FILE_PATTERN}}" -exec bash -c "{{.MINIFY_TOOL}} {} > {}.min && mv {}.min {}" \;
+        else
+          echo "No public directory found, skipping minification"
+        fi
+
   minify-html:
     desc: Minify HTML files
+    silent: true
+    vars:
+      FILE_PATTERN: "*.html"
     cmds:
-      - find public -name "*.html" -exec bash -c "{{.MINIFY_TOOL}} {} > {}.min && mv {}.min {}" \;
+      - task: minify-files
 
   minify-js:
     desc: Minify JS files
+    silent: true
+    vars:
+      FILE_PATTERN: "*.js"
     cmds:
-      - find public -name "*.js" -exec bash -c "{{.MINIFY_TOOL}} {} > {}.min && mv {}.min {}" \;
+      - task: minify-files
 
   minify-css:
     desc: Minify CSS files
+    silent: true
+    vars:
+      FILE_PATTERN: "*.css"
     cmds:
-      - find public -name "*.css" -exec bash -c "{{.MINIFY_TOOL}} {} > {}.min && mv {}.min {}" \;
+      - task: minify-files
 
   minify:
     desc: Minify all assets (HTML, JS, CSS)
@@ -115,7 +166,7 @@ tasks:
           lycheeverse/lychee:latest . -c /tmp/.lychee.toml
 
   build:
-    desc: Build
+    desc: Build complete Hugo site with all optimizations (npm deps, assets, Hugo, link check, minify)
     cmds:
       - task: npm-install
       - task: copy
@@ -124,7 +175,7 @@ tasks:
       - task: minify
 
   ci:
-    desc: Continuous Integration build
+    desc: Continuous Integration build (includes B2 setup and gallery images)
     cmds:
       - task: install-b2
       - task: get-gallery-images
