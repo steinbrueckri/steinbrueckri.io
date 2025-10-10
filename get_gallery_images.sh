@@ -130,9 +130,18 @@ validate_prerequisites() {
     
     # Check if b2 command is available
     if ! command -v b2 &> /dev/null; then
-        log_error "b2 command not found. Please install the B2 CLI tool."
-        log_info "Visit: https://www.backblaze.com/b2/docs/quick_command_line.html"
-        exit 1
+        # Try common installation paths
+        if [[ -f "$HOME/bin/b2" ]]; then
+            export PATH="$HOME/bin:$PATH"
+            log_info "Found b2 in $HOME/bin, added to PATH"
+        elif [[ -f "/usr/local/bin/b2" ]]; then
+            export PATH="/usr/local/bin:$PATH"
+            log_info "Found b2 in /usr/local/bin, added to PATH"
+        else
+            log_error "b2 command not found. Please install the B2 CLI tool."
+            log_info "Visit: https://www.backblaze.com/b2/docs/quick_command_line.html"
+            exit 1
+        fi
     fi
     
     # Check if required arguments are provided
