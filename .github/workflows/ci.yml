@@ -30,7 +30,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
 
       - name: Install Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
 
       - name: 🔧 Install Task
         uses: arduino/setup-task@v2
