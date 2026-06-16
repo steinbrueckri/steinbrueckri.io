@@ -8,11 +8,13 @@ on:
   push:
 
 # Minimal permissions instead of write-all.
-# - contents: write   -> commit comments posted by actions-netlify
+# - contents: write    -> commit comments posted by actions-netlify
 # - deployments: write -> GitHub deployment environments (dev/prod)
+# - statuses: write    -> "Netlify" commit status set by actions-netlify
 permissions:
   contents: write
   deployments: write
+  statuses: write
 
 env:
   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
