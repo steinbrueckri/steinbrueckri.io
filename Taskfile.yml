@@ -14,7 +14,6 @@ vars:
   ARCH: "{{ARCH}}"
 
 tasks:
-
   clean:
     desc: Clean build directory
     cmds:
@@ -44,11 +43,20 @@ tasks:
         fi
 
   hugo-build:
-    desc: Build Hugo site (with native minification)
+    desc: Build Hugo site
     cmds:
       - task: hugo-install
       - |
         {{.HUGO_PATH}} --minify || (echo "Hugo build failed!" && exit 1)
+
+  hugo-serve:
+    desc: Serve the site locally with a live-reloading dev server
+    cmds:
+      - task: hugo-install      # also runs npm-install
+      - task: copy              # external assets needed by resources.Get
+      - task: download-fonts
+      - |
+        {{.HUGO_PATH}} serve --minify || (echo "Hugo serve failed!" && exit 1)
 
   install-b2:
     desc: Install Backblaze B2 CLI if not already installed
@@ -137,11 +145,6 @@ tasks:
 
   lighthouse:
     desc: Run Lighthouse audits locally against a Hugo dev server (override URLs via LH_URLS)
-    deps:
-      - npm-install
-      - copy
-      - download-fonts
-      - hugo-install
     vars:
       LH_PORT: '{{.LH_PORT | default "1313"}}'
       # Pages that render without the B2 gallery images. Override e.g.:
@@ -149,6 +152,9 @@ tasks:
       LH_URLS: '{{.LH_URLS | default "/ /blog/ /gallery/"}}'
       LH_OUT: ".lighthouse"
     cmds:
+      - task: hugo-install      # also runs npm-install (provides ./node_modules/.bin/lighthouse)
+      - task: copy              # external assets needed by resources.Get
+      - task: download-fonts
       - |
         set -e
         port="{{.LH_PORT}}"
