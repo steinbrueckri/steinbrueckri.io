@@ -1,11 +1,18 @@
 ---
 name: ci
 
+# Only run on push. Pull request builds are intentionally not triggered:
+# the build needs repository secrets (B2 keys, Netlify token) which must never
+# be exposed to (fork) pull requests.
 on:
-  - push
-  - pull_request_target
+  push:
 
-permissions: write-all
+# Minimal permissions instead of write-all.
+# - contents: write   -> commit comments posted by actions-netlify
+# - deployments: write -> GitHub deployment environments (dev/prod)
+permissions:
+  contents: write
+  deployments: write
 
 env:
   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -17,7 +24,7 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
         with:
           lfs: true
 
@@ -27,10 +34,15 @@ jobs:
             **/public
             **/resources
             **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+          key: ${{ runner.os }}-build-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
 
       - name: Install Node
         uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+          cache: "npm"
 
       - name: 🔧 Install Task
         uses: arduino/setup-task@v2

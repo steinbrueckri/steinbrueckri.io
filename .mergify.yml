@@ -1,8 +1,11 @@
 pull_request_rules:
-  - name: automatic merge for Dependabot pull requests
+  - name: automatic merge for Dependabot patch and minor updates
     conditions:
       - author~=^dependabot(|-preview)\[bot\]$
       - check-success=ci
+      # Only auto-merge when the major version stays the same (patch/minor).
+      # Major bumps ("from 1.x to 2.x") are excluded and need a manual review.
+      - "title~=^Bump [^\\s]+ from ([\\d]+)\\..+ to \\1\\."
     actions:
       merge:
         method: merge
