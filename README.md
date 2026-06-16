@@ -12,7 +12,7 @@
 - [`B2`](https://www.backblaze.com/b2/cloud-storage.html) as source for the full resource images
 - [`GitHub actions`](https://github.com/features/actions) as CI/CD System
 
-It exist two build goals `build` and `ci`, the `ci` goal is obviously executed in the Github actions workflow ([`ci.yml`](./ci.yml)).
+There are two build goals `build` and `ci`. The `ci` goal is executed in the GitHub Actions workflow ([`ci.yml`](./.github/workflows/ci.yml)).
 
 The `ci` goal calls the script [get_gallery_images.sh](./get_gallery_images.sh) this script will download the images for
 the gallery's from the B2 Bucket (`source_bucket`) specific in the gallery index.md.
@@ -43,7 +43,7 @@ tags: ["Street", "BW", "Erfurt", "Ingolstadt", "Nuernberg"]
 
 ```sh
 hugo new --kind blog blog/Foobar-$(date +%Y-%m-%d)
-# you can also use a gulp task but in this case the name will be only the date
+# you can also use the Taskfile task, but in that case the name will be only the date
 task new-blog
 ```
 
@@ -53,6 +53,6 @@ task new-blog
 hugo new --kind gallery gallery/Street-$(date +%m-%Y)
 # or if you want to set a name by our own ...
 hugo new --kind gallery gallery/<NAME>
-# you can also use a gulp task
+# you can also use the Taskfile task
 task new-gallery
 ```

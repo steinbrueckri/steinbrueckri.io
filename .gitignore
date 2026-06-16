@@ -202,3 +202,6 @@ typings/
 
 # External deps, check gulpfile for more infos
 assets/external/**
+
+# macOS
+.DS_Store
