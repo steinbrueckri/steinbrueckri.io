@@ -69,7 +69,11 @@ require_https = false
 method = "get"
 
 # Remap URI matching pattern to different URI.
-# remap = ["https://example.com http://example.invalid"]
+# Resolve our own absolute URLs (canonical, og:image, font preload, css/js)
+# against the freshly built local site instead of the live deployment. Without
+# this, links to assets/pages added in this build 404 because they are not
+# deployed yet. Internal links are still validated, just locally.
+remap = ["https://steinbrueck.io file:///input"]
 
 # Root directory used to resolve root-relative links (e.g. "/blog") in local
 # files. Required since lychee v0.24. The link-checker task mounts the built
