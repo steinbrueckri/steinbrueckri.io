@@ -1,5 +1,5 @@
 # Site settings
-baseURL = ""
+baseURL = "https://steinbrueck.io/"
 languageCode = "en-US"
 title = "Hi, i'm Richard!"
 theme = "steinbrueckri"
@@ -21,10 +21,10 @@ copyright = "Richard Steinbrück"
 
   # Metadata for search engines and social sharing
   author = "Richard Steinbrück"
-  author_image = "images/me.jpg"
-  tagline = "tagline"
-  description = "My Blog"
-  shareImage = "images/me.jpg"
+  author_image = "me.jpg"
+  tagline = "Photography & Tech"
+  description = "Street photography portfolio and tech blog by Richard Steinbrück."
+  shareImage = "me.jpg"
   twitterHandle = "z3rogate"
 
   # Favicon

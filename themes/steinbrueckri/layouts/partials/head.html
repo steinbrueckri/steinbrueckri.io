@@ -1,42 +1,60 @@
 <head>
-    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} &middot; {{ .Site.Title }}{{ end }}</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-    <!-- Preload critical resources for better performance -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap"></noscript>
-    
-    {{ with .Site.Params.name }}<meta name="author" content="{{ . }}">{{ end }}
-    {{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
 
-    {{ if not .Site.Params.OpenGraph.hide }}
-    <meta name="og:site_name" content="{{ .Site.Title }}">
-    <meta name="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
-    <meta name="og:url" content="{{ .Permalink }}">
-    {{ if not .Site.Params.avatar.hide }}
-    {{ if eq .Site.Params.sidebar.use_remote_avatar true }}
-    <meta name="og:image" content="{{ .Site.Params.sidebar.avatar }}">
-    {{ else }}
-    <meta name="og:image" content="{{ .Site.BaseURL }}images/{{ .Site.Params.sidebar.avatar }}">
-    {{ end }}
-    {{ end }}
-    {{ end }}
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} &middot; {{ .Site.Title }}{{ end }}</title>
 
-    {{ if .Site.Params.sidebar.twitter}}
-    <meta name="twitter:site" content="summary">
-    <meta name="twitter:creator" content="@{{ .Site.Params.sidebar.twitter }}">
-    <meta name="twitter:title" content="{{$.Params.title}}">
-    <meta name="twitter:description" content="{{$.Params.description}}">
-    <meta name="twitter:image" content="{{$.Params.featured_image}}">
-    {{ end }}
+    {{ $description := or .Description .Site.Params.description }}
+    {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
+    <meta name="description" content="{{ $description }}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ .Permalink }}">
+
+    <!-- Favicon -->
+    {{ with .Site.Params.favicon }}<link rel="icon" href="{{ . | absURL }}">{{ end }}
+
+    <!-- Self-hosted fonts (GDPR-friendly, no Google Fonts CDN). @font-face lives in main.css. -->
+    <link rel="preload" href="{{ "fonts/roboto-mono-latin-400.woff2" | absURL }}" as="font" type="font/woff2" crossorigin>
+
+    <!-- Open Graph -->
+    {{ $ogTitle := cond .IsHome .Site.Title .Title }}
+    {{ $ogImage := .Site.Params.shareImage | absURL }}
+    <meta property="og:site_name" content="{{ .Site.Title }}">
+    <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+    <meta property="og:title" content="{{ $ogTitle }}">
+    <meta property="og:description" content="{{ $description }}">
+    <meta property="og:url" content="{{ .Permalink }}">
+    {{ with $ogImage }}<meta property="og:image" content="{{ . }}">{{ end }}
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary_large_image">
+    {{ with .Site.Params.twitterHandle }}<meta name="twitter:creator" content="@{{ . }}">{{ end }}
+    <meta name="twitter:title" content="{{ $ogTitle }}">
+    <meta name="twitter:description" content="{{ $description }}">
+    {{ with $ogImage }}<meta name="twitter:image" content="{{ . }}">{{ end }}
 
     {{ with .OutputFormats.Get "RSS" }}
     <link href="{{ .RelPermalink }}" rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" />
     <link href="{{ .RelPermalink }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}" />
     {{ end }}
 
-    {{ template "_internal/google_analytics.html" . }}
+    <!-- Structured data (JSON-LD) -->
+    {{ if .IsHome }}
+    {{ $author := dict "@type" "Person" "name" .Site.Params.author "image" $ogImage }}
+    {{ with .Site.Params.twitterHandle }}
+    {{ $author = merge $author (dict "sameAs" (slice (printf "https://twitter.com/%s" .))) }}
+    {{ end }}
+    {{ $ld := dict
+        "@context" "https://schema.org"
+        "@type" "WebSite"
+        "url" .Site.BaseURL
+        "name" .Site.Title
+        "description" $description
+        "author" $author
+    }}
+    <script type="application/ld+json">{{ $ld | jsonify (dict "indent" "  ") | safeJS }}</script>
+    {{ end }}
 
     <!-- baguettebox -->
     <link rel="stylesheet" href='{{ (resources.Get "external/baguetteBox.min.css").RelPermalink }}'>
