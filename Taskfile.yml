@@ -3,7 +3,6 @@ version: "3"
 vars:
   HUGO_VERSION: "0.134.3"
   HUGO_PATH: ".tmp/hugo"
-  B2_BIN_PATH: "$HOME/bin/b2"
   EXTERNAL_ASSETS_PATH: "./assets/external"
   FONTS_PATH: "./themes/steinbrueckri/static/fonts"
   # Roboto Mono (weight 400) self-hosted for GDPR compliance (no Google Fonts CDN).
@@ -58,29 +57,21 @@ tasks:
       - |
         {{.HUGO_PATH}} serve --minify || (echo "Hugo serve failed!" && exit 1)
 
-  install-b2:
-    desc: Install Backblaze B2 CLI if not already installed
+  install-rclone:
+    desc: "Ensure rclone is available (local via Homebrew, CI via official install script)"
     silent: true
     cmds:
       - |
-        if ! command -v b2 &> /dev/null; then
-          # Prefer installing via Python pip (official B2 SDK provides the 'b2' CLI)
-          if command -v python3 &> /dev/null; then
-            python3 -m pip install --user --upgrade b2 || pip3 install --user --upgrade b2 || pip install --user --upgrade b2
-            # Ensure ~/.local/bin is in PATH for GitHub Actions and typical Linux envs
-            export PATH="$HOME/.local/bin:$PATH"
-          else
-            # Fallback to pip if python3 is not found
-            pip install --user --upgrade b2
-            export PATH="$HOME/.local/bin:$PATH"
-          fi
-          if ! command -v b2 &> /dev/null; then
-            echo "b2 CLI installation via pip failed" && exit 1
-          fi
-          b2 version || (echo "b2 installation verification failed" && exit 1)
-          b2 account authorize
+        if command -v rclone &> /dev/null; then
+          echo "rclone is already installed."
+        elif command -v brew &> /dev/null; then
+          echo "Installing rclone via Homebrew..."
+          brew install rclone
         else
-          echo "b2 is already installed."
+          # CI / Linux without Homebrew
+          echo "Installing rclone via official script..."
+          curl -fsSL https://rclone.org/install.sh | sudo bash
+          rclone version || (echo "rclone installation verification failed" && exit 1)
         fi
 
   copy-baguettebox:
@@ -134,20 +125,20 @@ tasks:
       - hugo new --kind blog blog/$(date +%Y-%m-%d)
 
   get-gallery-images:
-    desc: Fetch gallery images from Backblaze B2 storage (requires 1Password CLI or env vars)
+    desc: Fetch gallery images from Hetzner Object Storage (requires 1Password CLI or env vars)
     cmds:
-      - ./get_gallery_images.sh "content/gallery/**" "{{.B2_APPLICATION_KEY_ID}}" "{{.B2_APPLICATION_KEY}}"
+      - ./get_gallery_images.sh "content/gallery/**" "{{.HETZNER_S3_ACCESS_KEY}}" "{{.HETZNER_S3_SECRET_KEY}}"
     vars:
-      B2_APPLICATION_KEY_ID:
-        sh: "[[ -z $B2_APPLICATION_KEY_ID ]] && op --account pixel-combo.1password.com item get sysbnrxrvnlha5nicpxhpzxkru --fields keyID || echo ${B2_APPLICATION_KEY_ID}"
-      B2_APPLICATION_KEY:
-        sh: "[[ -z $B2_APPLICATION_KEY ]] && op --account pixel-combo.1password.com item get sysbnrxrvnlha5nicpxhpzxkru --reveal --fields applicationKey || echo $B2_APPLICATION_KEY"
+      HETZNER_S3_ACCESS_KEY:
+        sh: '[[ -z $HETZNER_S3_ACCESS_KEY ]] && op --account pixel-combo.1password.com item get gvxtufmimnh2y576ehxdmcukwm --reveal --fields "Access Key" || echo ${HETZNER_S3_ACCESS_KEY}'
+      HETZNER_S3_SECRET_KEY:
+        sh: '[[ -z $HETZNER_S3_SECRET_KEY ]] && op --account pixel-combo.1password.com item get gvxtufmimnh2y576ehxdmcukwm --reveal --fields "Secret Key" || echo $HETZNER_S3_SECRET_KEY'
 
   lighthouse:
     desc: Run Lighthouse audits locally against a Hugo dev server (override URLs via LH_URLS)
     vars:
       LH_PORT: '{{.LH_PORT | default "1313"}}'
-      # Pages that render without the B2 gallery images. Override e.g.:
+      # Pages that render without the fetched gallery images. Override e.g.:
       #   task lighthouse LH_URLS="/ /blog/ /gallery/street-01-2020/"
       LH_URLS: '{{.LH_URLS | default "/ /blog/ /gallery/"}}'
       LH_OUT: ".lighthouse"
@@ -220,8 +211,8 @@ tasks:
       - task: link-checker
 
   ci:
-    desc: Continuous Integration build (includes B2 setup and gallery images)
+    desc: Continuous Integration build (includes object storage setup and gallery images)
     cmds:
-      - task: install-b2
+      - task: install-rclone
       - task: get-gallery-images
       - task: build

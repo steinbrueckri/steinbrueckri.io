@@ -67,6 +67,13 @@ Liste der geplanten Verbesserungen für die Website. Sortiert nach Priorität.
 
 - [x] **README inkonsistent**: `ci.yml`-Pfad korrigiert, `gulp`-Verweise auf Taskfile aktualisiert.
 - [x] **`.DS_Store`** in `.gitignore` aufgenommen.
+- [~] B2 mit hetzner objectstore austauschen (fsn1.your-objectstorage.com / steinbrueck-io-gallery, op uuid gvxtufmimnh2y576ehxdmcukwm)
+  - [x] Daten via rclone von B2 nach Hetzner kopiert
+  - [x] Tooling auf rclone + Hetzner-S3 umgestellt (Skript, Taskfile, CI, README, Archetype)
+  - [x] `source_bucket` entfernt – Pfad wird aus dem Galerie-Titel abgeleitet (per `source_bucket` überschreibbar)
+  - [ ] GitHub-Secrets `HETZNER_S3_ACCESS_KEY` / `HETZNER_S3_SECRET_KEY` anlegen (alte `B2_*`-Secrets entfernen)
+  - [ ] `task get-gallery-images` real gegen Hetzner verifizieren
+- [ ] Netlify vs <https://github.com/basecamp/kamal-skiff>
 
 ## 📸 Workflow (aus altem TODO.txt)
 

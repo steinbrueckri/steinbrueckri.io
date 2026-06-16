@@ -9,16 +9,20 @@
 - I use [`npm`](https://npm.com/) as package manager
 - [`taskfile`](https://taskfile.dev/) as task runner
 - [`hugo`](https://gohugo.io/) as static page generator
-- [`B2`](https://www.backblaze.com/b2/cloud-storage.html) as source for the full resource images
+- [`rclone`](https://rclone.org/) to fetch the full resource images from object storage
+- [Hetzner Object Storage](https://www.hetzner.com/storage/object-storage) (S3-compatible) as source for the full resource images
 - [`GitHub actions`](https://github.com/features/actions) as CI/CD System
 
 There are two build goals `build` and `ci`. The `ci` goal is executed in the GitHub Actions workflow ([`ci.yml`](./.github/workflows/ci.yml)).
 
-The `ci` goal calls the script [get_gallery_images.sh](./get_gallery_images.sh) this script will download the images for
-the gallery's from the B2 Bucket (`source_bucket`) specific in the gallery index.md.
-The script needs some environment variables to be set `B2_APPLICATION_KEY_ID` and `B2_APPLICATION_KEY`.
+The `ci` goal calls the script [get_gallery_images.sh](./get_gallery_images.sh) which downloads the gallery images from
+the Hetzner Object Storage bucket. By default each gallery is fetched from `<bucket>/<gallery title>` (i.e. the gallery
+directory name), so no per-gallery configuration is needed. A gallery can override the source by setting a
+`source_bucket: "bucket/path"` field in its `index.md`.
+The script needs the environment variables `HETZNER_S3_ACCESS_KEY` and `HETZNER_S3_SECRET_KEY` (in CI these come from
+GitHub secrets, locally from 1Password via the Taskfile).
 
-Example:
+Example (no `source_bucket` needed — derived from the title):
 
 ```yaml
 ---
@@ -26,7 +30,6 @@ title: "Street-01-2020"
 date: "2020-01-03"
 summary: ""
 draft: false
-source_bucket: "b2://steinbrueck-io-gallery/Street-01-2020"
 tags: ["Street", "BW", "Erfurt", "Ingolstadt", "Nuernberg"]
 ---
 ```
