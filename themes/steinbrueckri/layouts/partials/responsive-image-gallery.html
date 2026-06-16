@@ -24,27 +24,38 @@
 {{ end }}
 {{ $imgSrcSet = (delimit $imgSrcSet ",") }}
 
-<!-- generate a very small preview image -->
-{{ $small := $image.Resize "1500x q10" }}
+<!-- small, lightweight thumbnail used as lazy-load placeholder (real LQIP) -->
+{{ $thumb := $image.Resize "400x q50" }}
+
+<!-- EXIF details, shown as caption and image title -->
+{{ $exif := "" }}
+{{ with $image.Exif }}
+    {{ $exif = printf "%s%s%s%s"
+        (cond (gt (len (string .Tags.ISOSpeedRatings)) 0) (printf "ISO %v" .Tags.ISOSpeedRatings) "")
+        (cond (gt (len (string .Tags.ExposureTime)) 0) (printf " - %v" .Tags.ExposureTime) "")
+        (cond (gt (len (string .Tags.FocalLength)) 0) (printf " - %vmm" .Tags.FocalLength) "")
+        (cond (gt (len (string .Tags.FNumber)) 0) (printf " - F/%v" .Tags.FNumber) "")
+    }}
+{{ end }}
+
+<!-- meaningful alt text: explicit alt > gallery title > generic author fallback -->
+{{ $alt := or .alt .title (printf "Photograph by %s" $.Site.Params.author) }}
 
 <div class="gallery-item">
     <a href="{{ $imgSrc }}">
-        <img class="lazy thumbnail" src="{{ $small.RelPermalink }}" data-src="{{ $small.RelPermalink }}" data-srcset="{{ $imgSrcSet }}" data-sizes="(max-width: 500px) 100vw, (max-width: 768px) 90vw, (max-width: 1200px) 80vw, 70vw" alt="
-        {{ with $image.Exif }}
-            {{ with .Tags.ISOSpeedRatings }}ISO {{ . }}{{ end }}
-            {{ with .Tags.ExposureTime }} - {{ . }}{{ end }}
-            {{ with .Tags.FocalLength }} - {{ . }}mm{{ end }}
-            {{ with .Tags.FNumber }} - F/{{ . }}{{ end }}
-        {{ end }}
-        "/>
+        <img class="lazy thumbnail"
+             src="{{ $thumb.RelPermalink }}"
+             data-src="{{ $thumb.RelPermalink }}"
+             data-srcset="{{ $imgSrcSet }}"
+             data-sizes="(max-width: 500px) 100vw, (max-width: 768px) 90vw, (max-width: 1200px) 80vw, 70vw"
+             width="{{ $image.Width }}"
+             height="{{ $image.Height }}"
+             loading="lazy"
+             alt="{{ $alt }}"
+             {{ with $exif }}title="{{ . }}"{{ end }} />
     </a>
-    {{ with $image.Exif }}
-    <div class="gallery-item-caption">
-        {{ with .Tags.ISOSpeedRatings }}ISO {{ . }}{{ end }}
-        {{ with .Tags.ExposureTime }} - {{ . }}{{ end }}
-        {{ with .Tags.FocalLength }} - {{ . }}mm{{ end }}
-        {{ with .Tags.FNumber }} - F/{{ . }}{{ end }}
-    </div>
+    {{ with $exif }}
+    <div class="gallery-item-caption">{{ . }}</div>
     {{ end }}
 </div>
 
