@@ -4,8 +4,12 @@ vars:
   HUGO_VERSION: "0.134.3"
   HUGO_PATH: ".tmp/hugo"
   B2_BIN_PATH: "$HOME/bin/b2"
-  MINIFY_TOOL: "./node_modules/minify/bin/minify.js"
   EXTERNAL_ASSETS_PATH: "./assets/external"
+  FONTS_PATH: "./themes/steinbrueckri/static/fonts"
+  # Roboto Mono (weight 400) self-hosted for GDPR compliance (no Google Fonts CDN).
+  # Latin + latin-ext subsets cover German umlauts. Refresh with `task download-fonts --force`.
+  FONT_URL_LATIN: "https://fonts.gstatic.com/s/robotomono/v31/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_3vq_ROW4.woff2"
+  FONT_URL_LATIN_EXT: "https://fonts.gstatic.com/s/robotomono/v31/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_3vq_SuW4Ep0.woff2"
   OS: "{{OS}}"
   ARCH: "{{ARCH}}"
 
@@ -40,11 +44,11 @@ tasks:
         fi
 
   hugo-build:
-    desc: Build Hugo site
+    desc: Build Hugo site (with native minification)
     cmds:
       - task: hugo-install
       - |
-        {{.HUGO_PATH}} || (echo "Hugo build failed!" && exit 1)
+        {{.HUGO_PATH}} --minify || (echo "Hugo build failed!" && exit 1)
 
   install-b2:
     desc: Install Backblaze B2 CLI if not already installed
@@ -91,6 +95,26 @@ tasks:
       - copy-lazyload
       - copy-baguettebox
 
+  download-fonts:
+    desc: Download self-hosted Roboto Mono web fonts (GDPR-compliant, no Google CDN)
+    silent: true
+    cmds:
+      - mkdir -p {{.FONTS_PATH}}
+      - |
+        ua="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+        download() {
+          # $1 = URL, $2 = target filename
+          if [ -f "{{.FONTS_PATH}}/$2" ]; then
+            echo "Font $2 already present, skipping (use 'rm {{.FONTS_PATH}}/$2' to refresh)"
+            return 0
+          fi
+          echo "Downloading $2 ..."
+          curl -fsSL -H "User-Agent: $ua" "$1" -o "{{.FONTS_PATH}}/$2" \
+            || { echo "Failed to download $2"; exit 1; }
+        }
+        download "{{.FONT_URL_LATIN}}" "roboto-mono-latin-400.woff2"
+        download "{{.FONT_URL_LATIN_EXT}}" "roboto-mono-latin-ext-400.woff2"
+
   new-gallery:
     desc: Create new gallery with current month/year (e.g., Street-12-2024)
     cmds:
@@ -111,48 +135,6 @@ tasks:
       B2_APPLICATION_KEY:
         sh: "[[ -z $B2_APPLICATION_KEY ]] && op --account pixel-combo.1password.com item get sysbnrxrvnlha5nicpxhpzxkru --reveal --fields applicationKey || echo $B2_APPLICATION_KEY"
 
-  minify-files:
-    desc: Minify files of specified type
-    silent: true
-    cmds:
-      - |
-        if [ -d "public" ]; then
-          find public -name "{{.FILE_PATTERN}}" -exec bash -c "{{.MINIFY_TOOL}} {} > {}.min && mv {}.min {}" \;
-        else
-          echo "No public directory found, skipping minification"
-        fi
-
-  minify-html:
-    desc: Minify HTML files
-    silent: true
-    vars:
-      FILE_PATTERN: "*.html"
-    cmds:
-      - task: minify-files
-
-  minify-js:
-    desc: Minify JS files
-    silent: true
-    vars:
-      FILE_PATTERN: "*.js"
-    cmds:
-      - task: minify-files
-
-  minify-css:
-    desc: Minify CSS files
-    silent: true
-    vars:
-      FILE_PATTERN: "*.css"
-    cmds:
-      - task: minify-files
-
-  minify:
-    desc: Minify all assets (HTML, JS, CSS)
-    deps:
-      - minify-html
-      - minify-css
-      - minify-js
-
   link-checker:
     desc: Check for broken links in site
     cmds:
@@ -163,13 +145,13 @@ tasks:
           lycheeverse/lychee:latest . -c /tmp/.lychee.toml
 
   build:
-    desc: Build complete Hugo site with all optimizations (npm deps, assets, Hugo, link check, minify)
+    desc: Build complete Hugo site (npm deps, assets, fonts, Hugo with native minify, link check)
     cmds:
       - task: npm-install
       - task: copy
+      - task: download-fonts
       - task: hugo-build
       - task: link-checker
-      - task: minify
 
   ci:
     desc: Continuous Integration build (includes B2 setup and gallery images)
