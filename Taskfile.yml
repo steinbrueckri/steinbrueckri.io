@@ -135,6 +135,66 @@ tasks:
       B2_APPLICATION_KEY:
         sh: "[[ -z $B2_APPLICATION_KEY ]] && op --account pixel-combo.1password.com item get sysbnrxrvnlha5nicpxhpzxkru --reveal --fields applicationKey || echo $B2_APPLICATION_KEY"
 
+  lighthouse:
+    desc: Run Lighthouse audits locally against a Hugo dev server (override URLs via LH_URLS)
+    deps:
+      - npm-install
+      - copy
+      - download-fonts
+      - hugo-install
+    vars:
+      LH_PORT: '{{.LH_PORT | default "1313"}}'
+      # Pages that render without the B2 gallery images. Override e.g.:
+      #   task lighthouse LH_URLS="/ /blog/ /gallery/street-01-2020/"
+      LH_URLS: '{{.LH_URLS | default "/ /blog/ /gallery/"}}'
+      LH_OUT: ".lighthouse"
+    cmds:
+      - |
+        set -e
+        port="{{.LH_PORT}}"
+        out="{{.LH_OUT}}"
+        lh="./node_modules/.bin/lighthouse"
+
+        if [ ! -x "$lh" ]; then
+          echo "Lighthouse not found at $lh – run 'task npm-install' (or 'npm install')." && exit 1
+        fi
+
+        mkdir -p "$out"
+
+        # Start a local Hugo dev server. It rewrites baseURL to localhost so the
+        # absURL-based asset links resolve locally instead of to the prod domain.
+        {{.HUGO_PATH}} server --port "$port" --bind 127.0.0.1 --disableFastRender >/dev/null 2>&1 &
+        hugo_pid=$!
+        # Clean up reliably: kill the captured PID and, as a fallback, any Hugo
+        # server still bound to our port (Task's shell can background differently).
+        cleanup() {
+          kill "$hugo_pid" 2>/dev/null || true
+          pkill -f "hugo server --port $port" 2>/dev/null || true
+        }
+        trap cleanup EXIT
+
+        # Wait until the server accepts connections (no explicit sleep loop needed).
+        if ! curl -sf --retry 30 --retry-delay 1 --retry-connrefused "http://127.0.0.1:$port/" >/dev/null; then
+          echo "Hugo dev server did not come up on port $port" && exit 1
+        fi
+
+        status=0
+        for path in {{.LH_URLS}}; do
+          name=$(printf '%s' "$path" | sed 's#^/##; s#/$##; s#/#_#g')
+          [ -z "$name" ] && name="home"
+          echo "Auditing $path ..."
+          "$lh" "http://127.0.0.1:$port$path" \
+            --quiet \
+            --chrome-flags="--headless=new" \
+            --output=html \
+            --output-path="$out/$name.html" \
+            || { echo "Lighthouse audit failed for $path"; status=1; }
+        done
+
+        echo "Reports written to $out/ (open the .html files in a browser)."
+        cleanup
+        exit $status
+
   link-checker:
     desc: Check for broken links in site
     cmds:

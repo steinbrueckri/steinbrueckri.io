@@ -57,9 +57,11 @@ Liste der geplanten Verbesserungen für die Website. Sortiert nach Priorität.
 - [x] **`setup-node@v5` ohne `node-version`/`cache`** (`ci.yml`): `node-version: "20"` + `cache: "npm"`.
 - [x] **B2-CLI-Befehle inkonsistent**: `get_gallery_images.sh` nutzt jetzt ebenfalls
       `b2 account authorize` (B2 CLI v3+).
-- [ ] **Lighthouse-Audit deaktiviert** (`ci.yml`, FIXME "NO_FCP issues"):
-      → Wahrscheinliche Ursachen (globaler Cursor-Hide, leere `baseURL`) sind behoben.
-      Vor dem Reaktivieren einmal einen CI-Lauf beobachten, dann den auskommentierten Block aktivieren.
+- [x] **Lighthouse-Audit deaktiviert** (`ci.yml`, FIXME "NO_FCP issues"):
+      → Ursache (globaler Cursor-Hide, leere `baseURL`) behoben – NO_FCP tritt nicht mehr auf
+      (lokal verifiziert: Performance 97, A11y 85, Best Practices 96, SEO 100, FCP 1,4 s).
+      Statt im CI läuft das Audit jetzt offline über `task lighthouse` (lokaler Hugo-Server +
+      Lighthouse-CLI, Reports unter `.lighthouse/`). Der CI-Block bleibt auskommentiert.
 
 ## ⚪ Aufräumen / Doku
 

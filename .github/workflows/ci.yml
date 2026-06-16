@@ -67,7 +67,9 @@ jobs:
           overwrites-pull-request-comment: true
         timeout-minutes: 1
 
-      # FIXME: temp disable the lighthouse audit because of NO_FCP issues
+      # Lighthouse is run locally/offline via `task lighthouse` instead of in CI.
+      # The former NO_FCP failures were caused by the global cursor-hide and the
+      # empty baseURL, both now fixed. Re-enable the block below if a CI gate is wanted.
       # - name: Audit URLs using Lighthouse
       #   uses: treosh/lighthouse-ci-action@12.6.1
       #   with:

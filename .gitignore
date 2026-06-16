@@ -205,3 +205,6 @@ assets/external/**
 
 # macOS
 .DS_Store
+
+# Lighthouse reports (local audits via `task lighthouse`)
+.lighthouse/
