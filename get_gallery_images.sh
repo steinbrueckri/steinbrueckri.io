@@ -171,7 +171,7 @@ authenticate_b2() {
         return 0
     fi
     
-    if ! b2 authorize-account "$B2_APPLICATION_KEY_ID" "$B2_APPLICATION_KEY" &> /dev/null; then
+    if ! b2 account authorize "$B2_APPLICATION_KEY_ID" "$B2_APPLICATION_KEY" &> /dev/null; then
         log_error "Failed to authenticate with B2"
         exit 1
     fi
