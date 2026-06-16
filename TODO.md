@@ -47,8 +47,9 @@ Liste der geplanten Verbesserungen für die Website. Sortiert nach Priorität.
       `figcaption` und `title`.
 - [x] **"Look time: X minutes" = 4 Min. pro Bild** (`gallery/single.html`): Realistischer
       Faktor (~0,5 Min./Bild), Label zu "Viewing time" geändert.
-- [ ] **Mobile View nicht optimal** (aus altem TODO): Responsive Verhalten prüfen und verbessern.
-      → Offen: braucht echtes Geräte-/Viewport-Testing.
+- [x] **Mobile View: Frontpage klebte oben am Rand**: `.frontpage` bekommt auf Mobile
+      (≤768px/≤500px) denselben oberen Abstand (80px/70px) wie `.content`, sodass das Bild
+      nicht mehr unter dem fixierten Navigations-Button hängt.
 
 ## 🟡 CI / Build-Robustheit
 

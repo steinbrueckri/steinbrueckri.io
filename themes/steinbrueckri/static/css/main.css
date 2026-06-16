@@ -458,7 +458,8 @@ body {
         left: auto;
         width: 100%;
         height: auto;
-        margin: 20px 0;
+        /* clear the fixed navigation toggle so the image is not glued to the top */
+        margin: 80px 0 20px;
         transform: none;
     }
 
@@ -504,7 +505,7 @@ body {
     }
 
     .frontpage {
-        margin: 15px 0;
+        margin: 70px 0 15px;
     }
 
     .frame {
