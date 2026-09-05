@@ -2,7 +2,7 @@
     <div class="gallery">
         {{ $image := .Page.Resources.GetMatch (.Get "src") }}
         {{ partial "responsive-image-gallery" (dict "Site" $.Site "image" $image "attrs" (dict "class" "portfolio-photo" )) }}
-    <div class="gallery">
+    </div>
 {{ else }}
-<h1>FAILED</h1>
+{{ errorf "image shortcode: use named parameters, e.g. {{< image src=\"photo.jpg\" >}} (in %s)" .Page.File.Path }}
 {{ end }}
