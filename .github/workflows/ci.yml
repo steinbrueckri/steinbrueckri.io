@@ -25,7 +25,21 @@ env:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    # Hugo comes from the official image instead of an npm installer, which keeps
+    # the pinned version and the build environment in one place.
+    # Dependabot does not update container image tags in workflows, so this tag is
+    # maintained by hand. It must match HUGO_VERSION in Taskfile.yml -- if it drifts,
+    # `task hugo-install` fails with a version mismatch rather than building silently.
+    container:
+      image: ghcr.io/gohugoio/hugo:v0.165.0
+      # The image runs as the unprivileged "hugo" user; apk and the workspace need root.
+      options: --user root
     steps:
+      # The image is deliberately minimal, so pull in what the later steps need.
+      # This has to happen before checkout, which needs git-lfs.
+      - name: Install build tools
+        run: apk add --no-cache bash curl git git-lfs rclone tar
+
       - uses: actions/checkout@v4
         with:
           lfs: true
@@ -36,15 +50,11 @@ jobs:
             **/public
             **/resources
             **/node_modules
-          key: ${{ runner.os }}-build-${{ hashFiles('package-lock.json') }}
+          # Taskfile.yml carries HUGO_VERSION: a Hugo upgrade regenerates every
+          # processed image, so it has to take part in the cache key.
+          key: ${{ runner.os }}-build-${{ hashFiles('package-lock.json', 'Taskfile.yml') }}
           restore-keys: |
             ${{ runner.os }}-build-
-
-      - name: Install Node
-        uses: actions/setup-node@v7
-        with:
-          node-version: "20"
-          cache: "npm"
 
       - name: 🔧 Install Task
         uses: arduino/setup-task@v3

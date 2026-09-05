@@ -2,6 +2,7 @@ version: "3"
 
 vars:
   HUGO_VERSION: "0.165.0"
+  HUGO_IMAGE: "ghcr.io/gohugoio/hugo:v0.165.0"
   HUGO_PATH: ".tmp/hugo"
   EXTERNAL_ASSETS_PATH: "./assets/external"
   FONTS_PATH: "./themes/steinbrueckri/static/fonts"
@@ -30,16 +31,32 @@ tasks:
         fi
 
   hugo-install:
-    desc: Install Hugo
+    desc: Make the pinned Hugo available at {{.HUGO_PATH}}
     silent: true
     cmds:
       - task: npm-install
       - |
-        if [ ! -f "{{.HUGO_PATH}}" ]; then
-          ./node_modules/hugo-installer/bin/hugo-installer.js --extended true --version {{.HUGO_VERSION}} --destination .tmp/
-        else
-          echo "Hugo already installed at {{.HUGO_PATH}}"
+        if [ -x "{{.HUGO_PATH}}" ] && "{{.HUGO_PATH}}" version | grep -q "v{{.HUGO_VERSION}}"; then
+          echo "Hugo {{.HUGO_VERSION}} ready at {{.HUGO_PATH}}"
+          exit 0
         fi
+
+        # Hugo comes from the environment, not from a package manager: CI runs
+        # inside {{.HUGO_IMAGE}}, locally it is whatever you installed (brew).
+        # Symlinking keeps {{.HUGO_PATH}} as the single entry point for all tasks.
+        if ! command -v hugo >/dev/null 2>&1; then
+          echo "hugo not found. Install {{.HUGO_VERSION}}, e.g. 'brew install hugo'."
+          exit 1
+        fi
+        found=$(hugo version | sed -n 's/.*hugo v\([0-9.]*\).*/\1/p')
+        if [ "$found" != "{{.HUGO_VERSION}}" ]; then
+          echo "hugo $found found, but this site is pinned to {{.HUGO_VERSION}}."
+          echo "Upgrade your local Hugo or adjust HUGO_VERSION in Taskfile.yml."
+          exit 1
+        fi
+        mkdir -p .tmp
+        ln -sf "$(command -v hugo)" "{{.HUGO_PATH}}"
+        echo "Using hugo $found from $(command -v hugo)"
 
   hugo-build:
     desc: Build Hugo site

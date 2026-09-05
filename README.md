@@ -13,6 +13,12 @@
 - [Hetzner Object Storage](https://www.hetzner.com/storage/object-storage) (S3-compatible) as source for the full resource images
 - [`GitHub actions`](https://github.com/features/actions) as CI/CD System
 
+Hugo is pinned via `HUGO_VERSION` in [`Taskfile.yml`](./Taskfile.yml). CI runs inside the official
+`ghcr.io/gohugoio/hugo` image, which ships exactly that version; locally you need the same version on your
+`PATH` (`brew install hugo`). `task hugo-install` checks this and fails on a mismatch instead of building
+with the wrong version. When bumping Hugo, change both `HUGO_VERSION` and the image tag in
+[`ci.yml`](./.github/workflows/ci.yml).
+
 There are two build goals `build` and `ci`. The `ci` goal is executed in the GitHub Actions workflow ([`ci.yml`](./.github/workflows/ci.yml)).
 
 The `ci` goal calls the script [get_gallery_images.sh](./get_gallery_images.sh) which downloads the gallery images from
