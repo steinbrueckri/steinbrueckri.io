@@ -20,6 +20,7 @@
     <!-- Open Graph -->
     {{ $ogTitle := cond .IsHome .Site.Title .Title }}
     {{ $ogImage := .Site.Params.shareImage | absURL }}
+    {{ $authorImage := (or .Site.Params.author_image .Site.Params.shareImage) | absURL }}
     <meta property="og:site_name" content="{{ .Site.Title }}">
     <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
     <meta property="og:title" content="{{ $ogTitle }}">
@@ -41,7 +42,7 @@
 
     <!-- Structured data (JSON-LD) -->
     {{ if .IsHome }}
-    {{ $author := dict "@type" "Person" "name" .Site.Params.author "image" $ogImage }}
+    {{ $author := dict "@type" "Person" "name" .Site.Params.author "image" $authorImage }}
     {{ with .Site.Params.twitterHandle }}
     {{ $author = merge $author (dict "sameAs" (slice (printf "https://twitter.com/%s" .))) }}
     {{ end }}

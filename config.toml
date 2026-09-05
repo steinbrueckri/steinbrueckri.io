@@ -21,10 +21,12 @@ copyright = "Richard Steinbrück"
 
   # Metadata for search engines and social sharing
   author = "Richard Steinbrück"
+  # Portrait (used as Person.image in the JSON-LD structured data)
   author_image = "me.jpg"
   tagline = "Photography & Tech"
   description = "Street photography portfolio and tech blog by Richard Steinbrück."
-  shareImage = "me.jpg"
+  # Social preview: 1200x630 landscape, as expected by Open Graph / Twitter cards
+  shareImage = "og-image.jpg"
   twitterHandle = "z3rogate"
 
   # Favicon
