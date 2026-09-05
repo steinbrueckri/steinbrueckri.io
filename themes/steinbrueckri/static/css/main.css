@@ -252,6 +252,34 @@ h1 {
     margin-right: 100px;
 }
 
+/* Images in markdown content. The sources are served at twice the rendered size
+   for high-DPI screens, so cap the display width instead of letting the browser
+   use the intrinsic one. Scoped to <p> so gallery thumbnails keep their own rules. */
+.main-content p img {
+    display: block;
+    max-width: min(100%, 500px);
+    height: auto;
+}
+
+/* Portrait ({{< portrait >}} shortcode): the prose wraps around it. */
+.main-content .portrait {
+    float: right;
+    width: 320px;
+    max-width: 35%;
+    height: auto;
+    margin: 0 0 var(--space) calc(var(--space) * 2);
+}
+
+/* Narrow enough that a wrapped column would be a few words wide: stack instead. */
+@media only screen and (max-width: 600px) {
+    .main-content .portrait {
+        float: none;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 0 calc(var(--space) * 1.5);
+    }
+}
+
 .frontpage {
     transform: translateX(0);
     transition: transform calc(var(--nav-duration) * 2) var(--ease);

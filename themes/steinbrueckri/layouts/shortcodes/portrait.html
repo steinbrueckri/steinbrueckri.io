@@ -1,0 +1,5 @@
+{{- /* Portrait that the surrounding prose flows around. Defaults to the site's
+       author image, so the about page follows config.toml automatically. */ -}}
+{{- $src := .Get "src" | default .Site.Params.author_image -}}
+{{- $alt := .Get "alt" | default (printf "Portrait of %s" .Site.Params.author) -}}
+<img class="portrait" src="{{ $src | absURL }}" alt="{{ $alt }}">
