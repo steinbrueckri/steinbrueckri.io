@@ -474,7 +474,8 @@ body {
     }
 
     .main-navigation-breadcrumb {
-        padding-left: 20px;
+        /* clear the fixed menu toggle, whose width scales with the viewport */
+        padding-left: calc(2rem + 4vmin);
         padding-top: 5px;
     }
 
@@ -527,7 +528,8 @@ body {
     }
 
     .main-navigation-breadcrumb {
-        padding-left: 15px;
+        /* same reasoning as above: the toggle still sits on top of the crumb */
+        padding-left: calc(2rem + 4vmin);
     }
 
     .frontpage {
