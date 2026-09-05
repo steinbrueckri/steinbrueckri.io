@@ -45,19 +45,22 @@ input[type=text], select, textarea {
     resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
 }
 
-/* Style the submit button with a specific background color etc */
+/* Style the submit button to match the site's black and white palette */
 input[type=submit] {
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
     padding: 12px 20px;
-    border: none;
+    border: 1px solid var(--color-primary);
     border-radius: 4px;
     cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
 }
 
-/* When moving the mouse over the submit button, add a darker green color */
+/* Invert on hover, the same way the rest of the site handles emphasis */
 input[type=submit]:hover {
-    background-color: #45a049;
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
 }
 
 /* breadcrumb ------------------------------------------- */
