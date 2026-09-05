@@ -1,6 +1,6 @@
 # Site settings
 baseURL = "https://steinbrueck.io/"
-languageCode = "en-US"
+locale = "en-US"
 title = "Hi, i'm Richard!"
 theme = "steinbrueckri"
 

@@ -1,7 +1,7 @@
 version: "3"
 
 vars:
-  HUGO_VERSION: "0.134.3"
+  HUGO_VERSION: "0.165.0"
   HUGO_PATH: ".tmp/hugo"
   EXTERNAL_ASSETS_PATH: "./assets/external"
   FONTS_PATH: "./themes/steinbrueckri/static/fonts"

@@ -27,15 +27,19 @@
 <!-- small, lightweight thumbnail used as lazy-load placeholder (real LQIP) -->
 {{ $thumb := $image.Resize "400x q50" }}
 
-<!-- EXIF details, shown as caption and image title -->
+<!-- EXIF details, shown as caption and image title.
+     Image.Meta replaced Image.Exif in Hugo 0.155; the tags now sit directly on
+     .Meta.Exif and ISO is named "ISO". Aperture and focal length are stored as
+     rationals (28/5), so float turns them into the usual 5.6. Collecting the
+     parts in a slice keeps the separators right when a tag is missing. -->
 {{ $exif := "" }}
-{{ with $image.Exif }}
-    {{ $exif = printf "%s%s%s%s"
-        (cond (gt (len (string .Tags.ISOSpeedRatings)) 0) (printf "ISO %v" .Tags.ISOSpeedRatings) "")
-        (cond (gt (len (string .Tags.ExposureTime)) 0) (printf " - %v" .Tags.ExposureTime) "")
-        (cond (gt (len (string .Tags.FocalLength)) 0) (printf " - %vmm" .Tags.FocalLength) "")
-        (cond (gt (len (string .Tags.FNumber)) 0) (printf " - F/%v" .Tags.FNumber) "")
-    }}
+{{ with $image.Meta.Exif }}
+    {{ $parts := slice }}
+    {{ with .ISO }}{{ $parts = $parts | append (printf "ISO %v" .) }}{{ end }}
+    {{ with .ExposureTime }}{{ $parts = $parts | append (printf "%v" .) }}{{ end }}
+    {{ with .FocalLength }}{{ $parts = $parts | append (printf "%vmm" (float .)) }}{{ end }}
+    {{ with .FNumber }}{{ $parts = $parts | append (printf "F/%v" (float .)) }}{{ end }}
+    {{ $exif = delimit $parts " - " }}
 {{ end }}
 
 <!-- meaningful alt text: explicit alt > gallery title > generic author fallback -->
