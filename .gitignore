@@ -208,3 +208,6 @@ assets/external/**
 
 # Lighthouse reports (local audits via `task lighthouse`)
 .lighthouse/
+
+# lychee link checker cache
+.lycheecache
