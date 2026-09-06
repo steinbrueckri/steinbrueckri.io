@@ -68,14 +68,17 @@ require_https = false
 # Request method
 method = "get"
 
-# Custom request headers
-headers = []
-
-# Remap URI matching pattern to different URI.
-# remap = ["https://example.com http://example.invalid"]
-
-# Base URL or website root directory to check relative URLs.
-# base = "https://example.com"
+# `remap` and `root_dir` are passed by the link-checker task instead of being set
+# here: they have to point at the built site, which sits at a different path when
+# lychee runs natively than when it runs mounted into a container.
+#
+# remap resolves our own absolute URLs (canonical, og:image, font preload,
+# css/js) against the freshly built local site rather than the live deployment.
+# Without it, links to pages added in this build 404 because they are not
+# deployed yet. Internal links are still validated, just locally.
+#
+# root_dir resolves root-relative links (e.g. "/blog") and is required since
+# lychee v0.24.
 
 # HTTP basic auth support. This will be the username and password passed to the
 # authorization HTTP header. See
@@ -90,6 +93,11 @@ headers = []
 # Check links inside `<code>` and `<pre>` blocks as well as Markdown code
 # blocks.
 # include_verbatim = false
+
+# The built site lives in public/, which is listed in .gitignore. lychee honours
+# ignore files by default and would silently skip most of the site when it runs
+# natively (it only saw ~1300 of 1688 links), so ignore files are disabled here.
+no_ignore = true
 
 # Ignore case of paths when matching glob patterns.
 glob_ignore_case = false

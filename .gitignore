@@ -202,3 +202,12 @@ typings/
 
 # External deps, check gulpfile for more infos
 assets/external/**
+
+# macOS
+.DS_Store
+
+# Lighthouse reports (local audits via `task lighthouse`)
+.lighthouse/
+
+# lychee link checker cache
+.lycheecache

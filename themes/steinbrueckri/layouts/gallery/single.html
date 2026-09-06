@@ -8,7 +8,9 @@
     {{ end }}
 
     {{ $images := .Page.Resources.ByType "image" }}
-    Look time: {{ math.Round (mul (len $images) 4) }} minutes.
+    {{ $viewMinutes := math.Round (mul (len $images) 0.5) }}
+    {{ if lt $viewMinutes 1.0 }}{{ $viewMinutes = 1 }}{{ end }}
+    Viewing time: ~{{ $viewMinutes }} min.
     {{ if .Params.tags }}
     <div class="tags">
         Tags:
@@ -23,7 +25,7 @@
     <div class="gallery">
         {{ with .Page.Resources.ByType "image" }}
             {{ range . }}
-                {{ partial "responsive-image-gallery" (dict "Site" $.Site "image" . ) }}
+                {{ partial "responsive-image-gallery" (dict "Site" $.Site "image" . "title" $.Title) }}
             {{ end }}
         {{ end }}
     </div>

@@ -1,6 +1,6 @@
 # Site settings
-baseURL = ""
-languageCode = "en-US"
+baseURL = "https://steinbrueck.io/"
+locale = "en-US"
 title = "Hi, i'm Richard!"
 theme = "steinbrueckri"
 
@@ -21,10 +21,12 @@ copyright = "Richard Steinbrück"
 
   # Metadata for search engines and social sharing
   author = "Richard Steinbrück"
-  author_image = "images/me.jpg"
-  tagline = "tagline"
-  description = "My Blog"
-  shareImage = "images/me.jpg"
+  # Portrait (used as Person.image in the JSON-LD structured data)
+  author_image = "me.jpg"
+  tagline = "Photography & Tech"
+  description = "Street photography portfolio and tech blog by Richard Steinbrück."
+  # Social preview: 1200x630 landscape, as expected by Open Graph / Twitter cards
+  shareImage = "og-image.jpg"
   twitterHandle = "z3rogate"
 
   # Favicon

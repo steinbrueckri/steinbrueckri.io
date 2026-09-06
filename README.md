@@ -9,16 +9,26 @@
 - I use [`npm`](https://npm.com/) as package manager
 - [`taskfile`](https://taskfile.dev/) as task runner
 - [`hugo`](https://gohugo.io/) as static page generator
-- [`B2`](https://www.backblaze.com/b2/cloud-storage.html) as source for the full resource images
+- [`rclone`](https://rclone.org/) to fetch the full resource images from object storage
+- [Hetzner Object Storage](https://www.hetzner.com/storage/object-storage) (S3-compatible) as source for the full resource images
 - [`GitHub actions`](https://github.com/features/actions) as CI/CD System
 
-It exist two build goals `build` and `ci`, the `ci` goal is obviously executed in the Github actions workflow ([`ci.yml`](./ci.yml)).
+Hugo is pinned via `HUGO_VERSION` in [`Taskfile.yml`](./Taskfile.yml). CI runs inside the official
+`ghcr.io/gohugoio/hugo` image, which ships exactly that version; locally you need the same version on your
+`PATH` (`brew install hugo`). `task hugo-install` checks this and fails on a mismatch instead of building
+with the wrong version. When bumping Hugo, change both `HUGO_VERSION` and the image tag in
+[`ci.yml`](./.github/workflows/ci.yml).
 
-The `ci` goal calls the script [get_gallery_images.sh](./get_gallery_images.sh) this script will download the images for
-the gallery's from the B2 Bucket (`source_bucket`) specific in the gallery index.md.
-The script needs some environment variables to be set `B2_APPLICATION_KEY_ID` and `B2_APPLICATION_KEY`.
+There are two build goals `build` and `ci`. The `ci` goal is executed in the GitHub Actions workflow ([`ci.yml`](./.github/workflows/ci.yml)).
 
-Example:
+The `ci` goal calls the script [get_gallery_images.sh](./get_gallery_images.sh) which downloads the gallery images from
+the Hetzner Object Storage bucket. By default each gallery is fetched from `<bucket>/<gallery title>` (i.e. the gallery
+directory name), so no per-gallery configuration is needed. A gallery can override the source by setting a
+`source_bucket: "bucket/path"` field in its `index.md`.
+The script needs the environment variables `HETZNER_S3_ACCESS_KEY` and `HETZNER_S3_SECRET_KEY` (in CI these come from
+GitHub secrets, locally from 1Password via the Taskfile).
+
+Example (no `source_bucket` needed — derived from the title):
 
 ```yaml
 ---
@@ -26,7 +36,6 @@ title: "Street-01-2020"
 date: "2020-01-03"
 summary: ""
 draft: false
-source_bucket: "b2://steinbrueck-io-gallery/Street-01-2020"
 tags: ["Street", "BW", "Erfurt", "Ingolstadt", "Nuernberg"]
 ---
 ```
@@ -43,7 +52,7 @@ tags: ["Street", "BW", "Erfurt", "Ingolstadt", "Nuernberg"]
 
 ```sh
 hugo new --kind blog blog/Foobar-$(date +%Y-%m-%d)
-# you can also use a gulp task but in this case the name will be only the date
+# you can also use the Taskfile task, but in that case the name will be only the date
 task new-blog
 ```
 
@@ -53,6 +62,6 @@ task new-blog
 hugo new --kind gallery gallery/Street-$(date +%m-%Y)
 # or if you want to set a name by our own ...
 hugo new --kind gallery gallery/<NAME>
-# you can also use a gulp task
+# you can also use the Taskfile task
 task new-gallery
 ```

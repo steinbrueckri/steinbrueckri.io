@@ -1,36 +1,52 @@
 ---
 name: ci
 
+# Only run on push. Pull request builds are intentionally not triggered:
+# the build needs repository secrets (Hetzner S3 keys, Netlify token) which must never
+# be exposed to (fork) pull requests.
 on:
-  - push
-  - pull_request_target
+  push:
 
-permissions: write-all
-
-env:
-  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-  B2_APPLICATION_KEY_ID: ${{ secrets.B2_APPLICATION_KEY_ID }}
-  B2_APPLICATION_KEY: ${{ secrets.B2_APPLICATION_KEY }}
+# Minimal permissions instead of write-all.
+# - contents: write    -> commit comments posted by actions-netlify
+# - deployments: write -> GitHub deployment environments (dev/prod)
+# - statuses: write    -> "Netlify" commit status set by actions-netlify
+permissions:
+  contents: write
+  deployments: write
+  statuses: write
 
 jobs:
   ci:
     runs-on: ubuntu-latest
+    # Must match HUGO_VERSION in Taskfile.yml -- `task hugo-install` fails on
+    # drift. Dependabot does not touch container tags, so bump this by hand.
+    container:
+      image: ghcr.io/gohugoio/hugo:v0.165.0
+      # The image runs as the unprivileged "hugo" user; apk and the workspace need root.
+      options: --user root
     steps:
-      - uses: actions/checkout@master
+      # Only what has to exist before `task ci` runs: git-lfs for the checkout
+      # and the utilities the tasks call. The build itself is `task ci`, the
+      # same target as locally.
+      - name: Prepare container
+        run: apk add --no-cache bash curl git git-lfs rclone tar
+
+      - uses: actions/checkout@v4
         with:
           lfs: true
 
       - uses: actions/cache@v5
         with:
           path: |
-            **/public
             **/resources
             **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
-
-      - name: Install Node
-        uses: actions/setup-node@v7
+          # public/ stays out: Hugo does not clean its output directory, so a
+          # restored one would redeploy deleted pages. Taskfile.yml is in the key
+          # because a Hugo bump there regenerates every processed image.
+          key: ${{ runner.os }}-build-${{ hashFiles('package-lock.json', 'Taskfile.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
 
       - name: 🔧 Install Task
         uses: arduino/setup-task@v3
@@ -39,11 +55,17 @@ jobs:
           version: "3.x"
 
       - name: Build
+        env:
+          HETZNER_S3_ACCESS_KEY: ${{ secrets.HETZNER_S3_ACCESS_KEY }}
+          HETZNER_S3_SECRET_KEY: ${{ secrets.HETZNER_S3_SECRET_KEY }}
         run: task ci
 
       - name: Deploy to Netlify (dev)
         uses: nwtgck/actions-netlify@v4.0
         id: netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
           publish-dir: './public'
           production-deploy: false
@@ -55,7 +77,9 @@ jobs:
           overwrites-pull-request-comment: true
         timeout-minutes: 1
 
-      # FIXME: temp disable the lighthouse audit because of NO_FCP issues
+      # Lighthouse is run locally/offline via `task lighthouse` instead of in CI.
+      # The former NO_FCP failures were caused by the global cursor-hide and the
+      # empty baseURL, both now fixed. Re-enable the block below if a CI gate is wanted.
       # - name: Audit URLs using Lighthouse
       #   uses: treosh/lighthouse-ci-action@12.6.1
       #   with:
@@ -70,6 +94,9 @@ jobs:
       - name: Deploy to Netlify (prod)
         if: github.ref == 'refs/heads/master'
         uses: nwtgck/actions-netlify@v4.0
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
           publish-dir: './public'
           production-deploy: true

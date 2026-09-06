@@ -27,4 +27,11 @@
 <!-- generate a very small preview image -->
 {{ $small := $image.Resize "1500x q10" }}
 
-<img class="lazy" src="{{ $small.RelPermalink }}" alt="image" data-src="{{ $small.RelPermalink }}" data-srcset="{{ $imgSrcSet }}" data-sizes="(max-width: 500px) 100vw, (max-width: 768px) 90vw, (max-width: 1200px) 80vw, 70vw" />
+{{ $alt := or .alt (printf "Photograph by %s" $.Site.Params.author) }}
+
+<img class="lazy"
+     src="{{ $small.RelPermalink }}"
+     data-src="{{ $small.RelPermalink }}"
+     data-srcset="{{ $imgSrcSet }}"
+     data-sizes="(max-width: 500px) 100vw, (max-width: 768px) 90vw, (max-width: 1200px) 80vw, 70vw"
+     alt="{{ $alt }}" />
