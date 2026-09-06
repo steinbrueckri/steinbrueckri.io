@@ -16,12 +16,6 @@ permissions:
   deployments: write
   statuses: write
 
-env:
-  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-  HETZNER_S3_ACCESS_KEY: ${{ secrets.HETZNER_S3_ACCESS_KEY }}
-  HETZNER_S3_SECRET_KEY: ${{ secrets.HETZNER_S3_SECRET_KEY }}
-
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -51,9 +45,11 @@ jobs:
       - uses: actions/cache@v5
         with:
           path: |
-            **/public
             **/resources
             **/node_modules
+          # public/ is deliberately not cached: Hugo does not clean its output
+          # directory, so a restored one keeps pages that no longer exist and
+          # deploys them. Only the image cache in resources/ is worth keeping.
           # Taskfile.yml carries HUGO_VERSION: a Hugo upgrade regenerates every
           # processed image, so it has to take part in the cache key.
           key: ${{ runner.os }}-build-${{ hashFiles('package-lock.json', 'Taskfile.yml') }}
@@ -66,12 +62,20 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           version: "3.x"
 
+      # Secrets are scoped to the steps that need them instead of being handed to
+      # every step, including the third-party actions further down.
       - name: Build
+        env:
+          HETZNER_S3_ACCESS_KEY: ${{ secrets.HETZNER_S3_ACCESS_KEY }}
+          HETZNER_S3_SECRET_KEY: ${{ secrets.HETZNER_S3_SECRET_KEY }}
         run: task ci
 
       - name: Deploy to Netlify (dev)
         uses: nwtgck/actions-netlify@v4.0
         id: netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
           publish-dir: './public'
           production-deploy: false
@@ -100,6 +104,9 @@ jobs:
       - name: Deploy to Netlify (prod)
         if: github.ref == 'refs/heads/master'
         uses: nwtgck/actions-netlify@v4.0
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
           publish-dir: './public'
           production-deploy: true
