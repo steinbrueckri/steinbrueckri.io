@@ -3,6 +3,10 @@ version: "3"
 vars:
   HUGO_VERSION: "0.165.0"
   HUGO_IMAGE: "ghcr.io/gohugoio/hugo:v0.165.0"
+  # Pinned like Hugo: lychee v0.24 renamed config keys, and a floating version
+  # broke the build without anything in this repo changing.
+  LYCHEE_VERSION: "0.24.2"
+  LYCHEE_PATH: ".tmp/lychee"
   HUGO_PATH: ".tmp/hugo"
   EXTERNAL_ASSETS_PATH: "./assets/external"
   FONTS_PATH: "./themes/steinbrueckri/static/fonts"
@@ -209,14 +213,55 @@ tasks:
         cleanup
         exit $status
 
-  link-checker:
-    desc: Check for broken links in site
+  install-lychee:
+    desc: Make the pinned lychee available at {{.LYCHEE_PATH}}
+    silent: true
     cmds:
       - |
-        docker run --init -i --rm -w /input \
-          -v "$PWD/.lychee.toml:/tmp/.lychee.toml" \
-          -v "$PWD/public:/input" \
-          lycheeverse/lychee:latest . -c /tmp/.lychee.toml
+        if [ -x "{{.LYCHEE_PATH}}" ] && "{{.LYCHEE_PATH}}" --version | grep -q "{{.LYCHEE_VERSION}}"; then
+          echo "lychee {{.LYCHEE_VERSION}} ready at {{.LYCHEE_PATH}}"
+          exit 0
+        fi
+        mkdir -p .tmp
+
+        # A matching lychee on PATH (brew, distro package) is used as is.
+        if command -v lychee >/dev/null 2>&1 && lychee --version | grep -q "{{.LYCHEE_VERSION}}"; then
+          ln -sf "$(command -v lychee)" "{{.LYCHEE_PATH}}"
+          echo "Using lychee {{.LYCHEE_VERSION}} from $(command -v lychee)"
+          exit 0
+        fi
+
+        # Otherwise fetch the pinned release and verify its checksum.
+        arch=$(uname -m); [ "$arch" = "arm64" ] && arch=aarch64
+        case "$(uname -s)" in
+          Darwin) target="${arch}-apple-darwin" ;;
+          *) if [ -e /etc/alpine-release ] || ls /lib/ld-musl-* >/dev/null 2>&1; then
+               target="${arch}-unknown-linux-musl"
+             else
+               target="${arch}-unknown-linux-gnu"
+             fi ;;
+        esac
+        name="lychee-${target}.tar.gz"
+        base="https://github.com/lycheeverse/lychee/releases/download/lychee-v{{.LYCHEE_VERSION}}"
+        echo "Downloading $name"
+        curl -sSfL -o ".tmp/$name" "$base/$name"
+        curl -sSfL -o ".tmp/$name.sha256" "$base/$name.sha256"
+        (cd .tmp && sha256sum -c "$name.sha256")
+        tar xzf ".tmp/$name" -C .tmp
+        install -m 755 ".tmp/lychee-${target}/lychee" "{{.LYCHEE_PATH}}"
+        rm -rf ".tmp/lychee-${target}" ".tmp/$name" ".tmp/$name.sha256"
+        "{{.LYCHEE_PATH}}" --version
+
+  link-checker:
+    desc: Check for broken links in the built site (run `task hugo-build` first)
+    cmds:
+      - task: install-lychee
+      - |
+        # root_dir and remap are passed here rather than in .lychee.toml: they
+        # depend on where the built site sits, which the config cannot know.
+        {{.LYCHEE_PATH}} public -c .lychee.toml \
+          --root-dir "$PWD/public" \
+          --remap "https://steinbrueck.io file://$PWD/public"
 
   build:
     desc: Build complete Hugo site (npm deps, assets, fonts, Hugo with native minify, link check)

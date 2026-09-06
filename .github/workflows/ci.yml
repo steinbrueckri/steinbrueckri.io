@@ -37,7 +37,11 @@ jobs:
     steps:
       # The image is deliberately minimal, so pull in what the later steps need.
       # This has to happen before checkout, which needs git-lfs.
-      - name: Install build tools
+      # Only what has to exist before `task ci` can run: git-lfs for the
+      # checkout, plus the shell utilities the tasks use. Everything else the
+      # build needs (Hugo, lychee, rclone) is provided by the Taskfile, so CI
+      # runs the same targets as a local checkout does.
+      - name: Prepare container
         run: apk add --no-cache bash curl git git-lfs rclone tar
 
       - uses: actions/checkout@v4
