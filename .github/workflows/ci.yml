@@ -32,7 +32,7 @@ jobs:
       - name: Prepare container
         run: apk add --no-cache bash curl git git-lfs rclone tar
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           lfs: true
 
